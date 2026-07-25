@@ -6,8 +6,19 @@ from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity, create_a
 from flask_cors import CORS
 from config import app, db, api, jwt
 from models import User, UserSchema, Job, JobSchema, Material, MaterialSchema, MaterialLot, MaterialLotSchema, JobMaterialUsage, JobMaterialUsageSchema, ReorderRequest, ReorderRequestSchema, LaborEntry, LaborEntrySchema
+from functools import wraps
 
 CORS(app)
+
+def check_role(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        current_user_id = get_jwt_identity()
+        user = User.query.filter(User.id==current_user_id).first()
+        if user.role == "EMPLOYEE":
+            return {'error': 'Employee cannot create Jobs or order Materials'}, 404
+        return f(*args, **kwargs)
+    return decorated_function
 
 class Data(Resource):
     def get(self):
@@ -28,8 +39,8 @@ class Signup(Resource):
         try:
             db.session.add(user)
             db.session.commit()
-            access_token = create_access_token(identity=str(user.id))
-            return jsonify(token=access_token, user=UserSchema().dump(user)), 201
+            token = create_access_token(identity=str(user.id))
+            return make_response(jsonify(token=token, user=UserSchema().dump(user)), 201)
         except IntegrityError:
             return {'errors': ['422 Unprocessable Entity']}, 422
         
@@ -53,12 +64,14 @@ class Login(Resource):
 class Jobs(Resource):
     @jwt_required()
     def get(self):
-        jobs = Jobs.query.all()
+        jobs = Job.query.all()
         return JobSchema(many=True).dump(jobs), 200
     
     @jwt_required()
+    @check_role
     def post(self):
         current_user_id = get_jwt_identity()
+        
         request_json = request.get_json()
         job = Job(
             user_id = current_user_id,
@@ -76,6 +89,7 @@ class Jobs(Resource):
             return {'errors': ['422 Unprocessable Entity']}, 422
         
     @jwt_required()
+    @check_role
     def put(self):
         request_json = request.get_json()
         job = Job.query.filter(Job.id==request_json["id"]).first()
@@ -94,10 +108,12 @@ class Jobs(Resource):
             return {'errors': ['422 Unprocessable Entity']}, 422
 
     @jwt_required()
+    @check_role
     def delete(self):
         request_json = request.get_json()
-        Job.query.filter(Job.id==request_json["id"]).delete()
+        job = Job.query.filter(Job.id==request_json["id"]).first()
         try:
+            db.session.delete(job)
             db.session.commit()
             return {"status": "deleted"}, 200
         except IntegrityError:
@@ -109,33 +125,31 @@ class JobByID(Resource):
         job = Job.query.filter(Job.id == job_id).first()
         return JobSchema().dump(job), 200
     
-class JobCostbyID(Resource):
-    @jwt_required()
-    def get(self, job_id):
-        job_total = 0
-        job_material_usages = JobMaterialUsage.query.filter(JobMaterialUsage.job_id == job_id).all()
-        material_lots = MaterialLot.query.filter(MaterialLot.id==job_material_usages.id).all()
-        materials = Material.query.filter(Material.id==material_lots.id).all()
-        nonreusable_materials = []
-        reuasable_materials = []
-        for material in materials:
-            if material.stock_type == "NONREUSABLE":
-                nonreusable_materials.append(material)
-            elif material.stock == "REUSABLE":
-                reuasable_materials.append(material)
-        
-
-        
-                
+# class JobCostbyID(Resource):
+#     @jwt_required()
+#     def get(self, job_id):
+#         job_total = 0
+#         job_material_usages = JobMaterialUsage.query.filter(JobMaterialUsage.job_id == job_id).all()
+#         material_lots = MaterialLot.query.filter(MaterialLot.id==job_material_usages.id).all()
+#         materials = Material.query.filter(Material.id==material_lots.id).all()
+#         nonreusable_materials = []
+#         reuasable_materials = []
+#         for material in materials:
+#             if material.stock_type == "NONREUSABLE":
+#                 nonreusable_materials.append(material)
+#             elif material.stock == "REUSABLE":
+#                 reuasable_materials.append(material)
         
     
 class OrderMaterial(Resource):
     @jwt_required()
+    @check_role
     def post(self):
         request_json = request.get_json()
+
         material = Material(
             name = request_json["name"],
-            stock_type = request_json["stock_type"],
+            # stock_type = request_json["stock_type"],
             unit_measure = request_json["unit_measure"],
             distributor = request_json["distributor"],
             reorder_point = request_json["reorder_point"]
@@ -251,7 +265,6 @@ class ReorderRequests(Resource):
         reorder_requests = ReorderRequest.query.all()
         return ReorderRequestSchema(many=True).dump(reorder_requests), 200
 
-
     @jwt_required()
     def post(self):
         request_json = request.get_json()
@@ -308,7 +321,7 @@ api.add_resource(UseExistingMaterialLot, '/api/use_existing_material_lot', endpo
 api.add_resource(LaborEntries, '/api/labor_entries', endpoint='labor_entries')
 api.add_resource(LaborEntriesByJob, '/api/labor_entries_by_job', endpoint='labor_entries_by_job')
 api.add_resource(LaborEntryByID, '/api/labor_entries/<int:labor_entry_id>')
-api.add_resource(ReorderRequests, 'api/reorder_requests', endpoint='reorder_requests')
+api.add_resource(ReorderRequests, '/api/reorder_requests', endpoint='reorder_requests')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

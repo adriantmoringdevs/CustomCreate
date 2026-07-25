@@ -18,7 +18,6 @@ class User(db.Model):
     labor_entries = db.relationship('LaborEntry', back_populates='user')
     reorder_requests = db.relationship('ReorderRequest', back_populates='user')
     
-
     @hybrid_property
     def password_hash(self):
         raise AttributeError('Password hashes may not be viewed.')
@@ -53,7 +52,7 @@ class UserSchema(Schema):
         created_at = fields.String()
 
         jobs = fields.List(fields.Nested(lambda: JobSchema(exclude=("user",))))
-        labor_entries = fields.List(fields.Nested(lambda: LaborEntrySchema(exclude=("user",))))
+        # labor_entries = fields.List(fields.Nested(lambda: LaborEntrySchema(exclude=("user",))))
         reorder_requests = fields.List(fields.Nested(lambda: ReorderRequestSchema(exclude=("user",))))
 
 class Job(db.Model):
@@ -66,6 +65,7 @@ class Job(db.Model):
     created_at = db.Column(db.DateTime, default=lambda:datetime.now(timezone.utc))
     status = db.Column(db.String, nullable=False)
     payment_status = db.Column(db.String, nullable=False)
+    total_job_cost = db.Column(db.Numeric(10, 2), default=0.00)
 
     user = db.relationship('User', back_populates='jobs')
     labor_entries = db.relationship('LaborEntry', back_populates='job', cascade="all, delete-orphan",)
@@ -102,9 +102,10 @@ class JobSchema(Schema):
     created_at = fields.String()
     status = fields.String(required=True)
     payment_status = fields.String(required=True)
+    total_job_cost = fields.Decimal(places=2, as_string=True)
 
     user = fields.Nested(UserSchema(exclude=("jobs",)))
-    labor_entries = fields.List(fields.Nested(lambda: LaborEntrySchema(exclude=("jobs",))))
+    labor_entries = fields.List(fields.Nested(lambda: LaborEntrySchema(exclude=("job",))))
     job_material_usages = fields.List(fields.Nested(lambda: JobMaterialUsageSchema(exclude=("job",))))
 
 class LaborEntry(db.Model):
@@ -127,7 +128,7 @@ class LaborEntrySchema(Schema):
     hours = fields.Int(required=True)
     hourly_rate = fields.Decimal(places=2, as_string=True)
 
-    user = fields.Nested(UserSchema(exclude=("labor_entries",)))
+    # user = fields.Nested(UserSchema(exclude=("labor_entries", "jobs")))
     job = fields.Nested(JobSchema(exclude=("labor_entries",)))
 
 class JobMaterialUsage(db.Model):
@@ -181,7 +182,7 @@ class Material(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    stock_type = db.Column(db.String, nullable=False)
+    # stock_type = db.Column(db.String, nullable=False)
     unit_measure = db.Column(db.String, nullable=False)
     distributor = db.Column(db.String)
     reorder_point = db.Column(db.Numeric(20, 5))
@@ -189,20 +190,20 @@ class Material(db.Model):
     material_lots = db.relationship('MaterialLot', back_populates="material")
     reorder_requests = db.relationship('ReorderRequest', back_populates="material")
 
-    @validates('stock_type')
-    def validate_status(self, key, value):
-        valid_stocks = ["REUSABLE", "NONREUSABLE"]
-        if value == "":
-            raise ValueError("Stock type must be included")
-        if value in valid_stocks:
-            return value
-        else:
-            raise ValueError("Stock type must be reusable or nonreusable.")
+    # @validates('stock_type')
+    # def validate_status(self, key, value):
+    #     valid_stocks = ["REUSABLE", "NONREUSABLE"]
+    #     if value == "":
+    #         raise ValueError("Stock type must be included")
+    #     if value in valid_stocks:
+    #         return value
+    #     else:
+    #         raise ValueError("Stock type must be reusable or nonreusable.")
 
 class MaterialSchema(Schema):
     id = fields.Int()
     name = fields.Str(required=True)
-    stock_type = fields.Str(required=True)
+    # stock_type = fields.Str(required=True)
     unit_measure = fields.Str()
     distributor = fields.Str()
     reorder_point = fields.Decimal(places=5, as_string=True)
