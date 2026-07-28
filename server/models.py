@@ -182,7 +182,7 @@ class Material(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    # stock_type = db.Column(db.String, nullable=False)
+    sku = db.Column(db.String(50), nullable=False)
     unit_measure = db.Column(db.String, nullable=False)
     distributor = db.Column(db.String)
     reorder_point = db.Column(db.Numeric(20, 5))
@@ -190,20 +190,20 @@ class Material(db.Model):
     material_lots = db.relationship('MaterialLot', back_populates="material")
     reorder_requests = db.relationship('ReorderRequest', back_populates="material")
 
-    # @validates('stock_type')
-    # def validate_status(self, key, value):
-    #     valid_stocks = ["REUSABLE", "NONREUSABLE"]
-    #     if value == "":
-    #         raise ValueError("Stock type must be included")
-    #     if value in valid_stocks:
-    #         return value
-    #     else:
-    #         raise ValueError("Stock type must be reusable or nonreusable.")
+    __table_args__ = (
+        db.UniqueConstraint('sku', name='uq_material_sku'),
+        )
+
+    @validates('sku')
+    def validate_status(self, key, value):
+        if len(value) > 50:
+            raise ValueError("SKU must be 50 characters or less")
+        return value
 
 class MaterialSchema(Schema):
     id = fields.Int()
     name = fields.Str(required=True)
-    # stock_type = fields.Str(required=True)
+    sku = fields.String(required=True)
     unit_measure = fields.Str()
     distributor = fields.Str()
     reorder_point = fields.Decimal(places=5, as_string=True)

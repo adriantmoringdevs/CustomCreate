@@ -124,55 +124,111 @@ class JobByID(Resource):
     def get(self, job_id):
         job = Job.query.filter(Job.id == job_id).first()
         return JobSchema().dump(job), 200
+
+class Materials(Resource):
+    @jwt_required()
+    def get(self):
+        materials = Material.query.all()
+        return MaterialSchema(many=True).dump(materials), 200
+
+    @jwt_required()
+    @check_role
+    def post(self):
+        request_json = request.get_json()
+        material = Material(
+            name = request_json["name"],
+            sku = request_json["sku"],
+            unit_measure = request_json["unit_measure"],
+            distributor = request_json["distributor"],
+            reorder_point = request_json["reorder_point"]
+        )
+        try:
+            db.session.add(material)
+            db.session.commit()
+            return MaterialSchema().dump(material), 201
+        except IntegrityError:
+            return {'errors': ['422 Unprocessable Entity']}, 422
+
+    @jwt_required()
+    @check_role
+    def put(self):
+        request_json = request.get_json()
+        material = Material.query.filter(Material.id==request_json["id"]).first()
+        if not material:
+            return {'error': 'Material not found.'}, 404 
+        material.name = request_json["name"]
+        material.sku = request_json["sku"]
+        material.unit_measure = request_json["unit_measure"]
+        material.distributor = request_json["distributor"]
+        material.reorder_point = request_json["reorder_point"]
+
+        try:
+            db.session.commit()
+            return MaterialSchema().dump(material), 200
+        except IntegrityError:
+            return {'errors': ['422 Unprocessable Entity']}, 422
+
+    @jwt_required()
+    @check_role
+    def delete(self):
+        request_json = request.get_json()
+        material = Material.query.filter(Material.id==request_json["id"]).first()
+        try:
+            db.session.delete(material)
+            db.session.commit()
+            return {"status": "deleted"}, 200
+        except IntegrityError:
+            return {'errors': ['422 Unprocessable Entity']}, 422
     
-# class JobCostbyID(Resource):
-#     @jwt_required()
-#     def get(self, job_id):
-#         job_total = 0
-#         job_material_usages = JobMaterialUsage.query.filter(JobMaterialUsage.job_id == job_id).all()
-#         material_lots = MaterialLot.query.filter(MaterialLot.id==job_material_usages.id).all()
-#         materials = Material.query.filter(Material.id==material_lots.id).all()
-#         nonreusable_materials = []
-#         reuasable_materials = []
-#         for material in materials:
-#             if material.stock_type == "NONREUSABLE":
-#                 nonreusable_materials.append(material)
-#             elif material.stock == "REUSABLE":
-#                 reuasable_materials.append(material)
-        
     
 class OrderMaterial(Resource):
     @jwt_required()
     @check_role
     def post(self):
         request_json = request.get_json()
+        material = Material.query.filter_by(sku=request_json["sku"]).first()
 
-        material = Material(
-            name = request_json["name"],
-            # stock_type = request_json["stock_type"],
-            unit_measure = request_json["unit_measure"],
-            distributor = request_json["distributor"],
-            reorder_point = request_json["reorder_point"]
-        )
-        material_lot = MaterialLot(
-            quantity_purchased = request_json["quantity_purchased"],
-            unit_cost = request_json["unit_cost"],
-            quantity_remaining = request_json["quantity_remaining"],
-            material = material
-        )
-        job_material_usage = JobMaterialUsage(
-            quantity_used = request_json["quantity_used"],
-            job_id = request_json["job_id"],
-            material_lot = material_lot
-        )
+        if not material:
+            try:
+                material = Material(
+                        name = request_json["name"],
+                        sku= request_json["sku"],
+                        unit_measure = request_json["unit_measure"],
+                        distributor = request_json["distributor"],
+                        reorder_point = request_json["reorder_point"]
+                        )
+                db.session.add(material)
+                db.session.flush()
+            except IntegrityError:
+                db.session.rollback()
+                material = Material.query.filter_by(sku=request_json["sku"]).first()
+
         try:
-            db.session.add(material)
+            material_lot = MaterialLot(
+                quantity_purchased = request_json["quantity_purchased"],
+                unit_cost = request_json["unit_cost"],
+                quantity_remaining = request_json["quantity_remaining"],
+                material_id = material.id
+            )
             db.session.add(material_lot)
-            db.session.add(job_material_usage)
-            db.session.commit()
-            return MaterialSchema().dump(material), 201
+            db.session.flush()
         except IntegrityError:
-            return {'errors': ['422 Unprocessable Entity']}, 422
+            db.session.rollback()
+
+        try:
+            job_material_usage = JobMaterialUsage(
+                quantity_used = request_json["quantity_used"],
+                job_id = request_json["job_id"],
+                material_lot_id = material_lot.id
+            )
+            db.session.add(job_material_usage)
+            db.session.flush()
+        except IntegrityError:
+                db.session.rollback()
+
+        db.session.commit()
+        return MaterialSchema().dump(material), 201
+
 
 class UseExistingMaterialLot(Resource):
     @jwt_required()
@@ -316,6 +372,7 @@ api.add_resource(WhoAmI, '/api/me', endpoint='me')
 api.add_resource(Login, '/api/login', endpoint='login')
 api.add_resource(Jobs, '/api/jobs', endpoint='jobs')
 api.add_resource(JobByID, '/api/jobs/<int:job_id>')
+api.add_resource(Materials, '/api/materials', endpoint='materials')
 api.add_resource(OrderMaterial, '/api/order_material', endpoint='order_material')
 api.add_resource(UseExistingMaterialLot, '/api/use_existing_material_lot', endpoint='use_existing_material_lot')
 api.add_resource(LaborEntries, '/api/labor_entries', endpoint='labor_entries')
