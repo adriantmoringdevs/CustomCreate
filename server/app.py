@@ -225,14 +225,14 @@ class OrderMaterial(Resource):
         except IntegrityError:
                 db.session.rollback()
 
-        job = Job.query.filter(Job.id==request_json["job_id"]).first()
-        current_job_cost = job.total_job_cost
+        # job = Job.query.filter(Job.id==request_json["job_id"]).first()
+        # current_job_cost = job.total_job_cost
         try:
-            job.total_job_cost = current_job_cost + (job_material_usage.quantity_used * material_lot.unit_cost)
+            # job.total_job_cost = current_job_cost + (job_material_usage.quantity_used * material_lot.unit_cost)
             db.session.commit()
             return MaterialSchema().dump(material), 201
         except IntegrityError:
-            job.total_job_cost = current_job_cost
+            # job.total_job_cost = current_job_cost
             return {'errors': ['422 Unprocessable Entity']}, 422
         
 
@@ -253,17 +253,17 @@ class UseExistingMaterialLot(Resource):
             material_lot_id = request_json["material_lot_id"]
         )
 
-        job = Job.query.filter(Job.id==request_json["job_id"]).first()
-        current_job_cost = job.total_job_cost
+        # job = Job.query.filter(Job.id==request_json["job_id"]).first()
+        # current_job_cost = job.total_job_cost
 
         try:
-            job.total_job_cost = current_job_cost + (request_json["quantity_used"] * material_lot.unit_cost)
+            # job.total_job_cost = current_job_cost + (request_json["quantity_used"] * material_lot.unit_cost)
             db.session.add(job_material_usage)
             db.session.commit()
             return JobMaterialUsageSchema().dump(job_material_usage), 201
         
         except IntegrityError:
-            job.total_job_cost = current_job_cost
+            # job.total_job_cost = current_job_cost
             return {'errors': ['422 Unprocessable Entity']}, 422
 
 class LaborEntries(Resource):
@@ -277,15 +277,15 @@ class LaborEntries(Resource):
             hours = request_json["hours"],
             hourly_rate = request_json["hourly_rate"]
         )
-        job = Job.query.filter(Job.id==request_json["job_id"]).first()
-        current_job_cost = job.total_job_cost
+        # job = Job.query.filter(Job.id==request_json["job_id"]).first()
+        # current_job_cost = job.total_job_cost
         try:
-            job.total_job_cost = current_job_cost + (request_json["hours"] * request_json["hourly_rate"])
+            # job.total_job_cost = current_job_cost + (request_json["hours"] * request_json["hourly_rate"])
             db.session.add(labor_entry)
             db.session.commit()
             return LaborEntrySchema().dump(labor_entry), 201
         except IntegrityError:
-            job.total_job_cost = current_job_cost
+            # job.total_job_cost = current_job_cost
             return {'errors': ['422 Unprocessable Entity']}, 422
         
     @jwt_required()
@@ -294,8 +294,8 @@ class LaborEntries(Resource):
         current_id = get_jwt_identity()
         labor_entry = LaborEntry.query.filter(LaborEntry.id==request_json["id"]).first()
 
-        current_entry_total = labor_entry.hours * labor_entry.hourly_rate
-        job = Job.query.filter(Job.id==["job_id"]).first()
+        # current_entry_total = labor_entry.hours * labor_entry.hourly_rate
+        # job = Job.query.filter(Job.id==["job_id"]).first()
 
         if not labor_entry:
             return {'error': 'Labor Entry not found.'}, 404
@@ -304,31 +304,31 @@ class LaborEntries(Resource):
         
         labor_entry.hours = request_json["hours"]
         labor_entry.hourly_rate = request_json["hourly_rate"]
-        current_job_cost = job.total_job_cost
+        # current_job_cost = job.total_job_cost
 
         try:
-            job.total_job_cost = current_job_cost - current_entry_total + (request_json["hours"] * request_json["hourly_rate"])
+            # job.total_job_cost = current_job_cost - current_entry_total + (request_json["hours"] * request_json["hourly_rate"])
             db.session.commit()
             return LaborEntrySchema().dump(labor_entry), 200
         
         except IntegrityError:
-            job.total_job_cost = current_job_cost
+            # job.total_job_cost = current_job_cost
             return {'errors': ['422 Unprocessable Entity']}, 422
         
     @jwt_required() 
     def delete(self):
         request_json = request.get_json()
         labor_entry = LaborEntry.query.filter(LaborEntry.id==request_json["id"])
-        job = Job.query.filter(Job.id==request_json["job_id"]).first()
-        current_entry_total = labor_entry.hours * labor_entry.hourly_rate
-        current_job_cost = job.total_job_cost
+        # job = Job.query.filter(Job.id==request_json["job_id"]).first()
+        # current_entry_total = labor_entry.hours * labor_entry.hourly_rate
+        # current_job_cost = job.total_job_cost
         try:
-            job.total_job_cost = current_job_cost - current_entry_total
+            # job.total_job_cost = current_job_cost - current_entry_total
             db.session.delete(labor_entry)
             db.session.commit()
             return {"status": "deleted"}, 200
         except IntegrityError:
-            job.total_job_cost = current_job_cost
+            # job.total_job_cost = current_job_cost
             return {'errors': ['422 Unprocessable Entity']}, 422
 
 class LaborEntriesByJob(Resource):

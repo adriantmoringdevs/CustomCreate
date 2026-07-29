@@ -65,11 +65,26 @@ class Job(db.Model):
     created_at = db.Column(db.DateTime, default=lambda:datetime.now(timezone.utc))
     status = db.Column(db.String, nullable=False)
     payment_status = db.Column(db.String, nullable=False)
-    total_job_cost = db.Column(db.Numeric(10, 2), default=0.00)
+    # total_job_cost = db.Column(db.Numeric(10, 2), default=0.00)
 
     user = db.relationship('User', back_populates='jobs')
     labor_entries = db.relationship('LaborEntry', back_populates='job', cascade="all, delete-orphan",)
     job_material_usages = db.relationship('JobMaterialUsage', back_populates='job', cascade="all, delete-orphan",)
+
+    @property
+    def labor_cost(self):
+        return sum(entry.hourly_rate * entry.hours for entry in self.labor_entries)
+
+    @property
+    def material_cost(self):
+        return sum(
+            usage.quantity_used * usage.material_lot.unit_cost
+            for usage in self.job_material_usages)
+
+    @property
+    def total_job_cost(self):
+        return self.labor_cost + self.material_cost
+
 
     @validates('status')
     def validate_status(self, key, value):
@@ -105,8 +120,12 @@ class JobSchema(Schema):
     total_job_cost = fields.Decimal(places=2, as_string=True)
 
     user = fields.Nested(UserSchema(exclude=("jobs",)))
-    labor_entries = fields.List(fields.Nested(lambda: LaborEntrySchema(exclude=("job",))))
-    job_material_usages = fields.List(fields.Nested(lambda: JobMaterialUsageSchema(exclude=("job",))))
+    labor_cost = fields.Function(lambda job: round(float(job.labor_cost), 2))
+    material_cost = fields.Function(lambda job: round(float(job.material_cost), 2))
+    total_job_cost = fields.Function(lambda job: round(float(job.total_job_cost), 2))
+
+    # labor_entries = fields.List(fields.Nested(lambda: LaborEntrySchema(exclude=("job",))))
+    # job_material_usages = fields.List(fields.Nested(lambda: JobMaterialUsageSchema(exclude=("job",))))
 
 class LaborEntry(db.Model):
     __tablename__ = 'labor_entries'
@@ -129,7 +148,7 @@ class LaborEntrySchema(Schema):
     hourly_rate = fields.Decimal(places=2, as_string=True)
 
     # user = fields.Nested(UserSchema(exclude=("labor_entries", "jobs")))
-    job = fields.Nested(JobSchema(exclude=("labor_entries",)))
+    # job = fields.Nested(JobSchema(exclude=("labor_entries",)))
 
 class JobMaterialUsage(db.Model):
     __tablename__ = 'job_material_usages'
@@ -150,7 +169,7 @@ class JobMaterialUsageSchema(Schema):
     id = fields.Int()
     quantity_used = fields.Decimal(places=5, as_string=True)
 
-    job = fields.Nested(JobSchema(exclude=("job_material_usages",)))
+    # job = fields.Nested(JobSchema(exclude=("job_material_usages",)))
     material_lot = fields.Nested(lambda: MaterialLotSchema(exclude=("job_material_usages",)))
 
 
