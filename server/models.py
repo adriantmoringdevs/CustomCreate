@@ -1,8 +1,6 @@
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.hybrid import hybrid_property
-from marshmallow import Schema, fields
 from datetime import datetime, timezone
-
 from config import db, bcrypt
 
 class User(db.Model):
@@ -45,15 +43,6 @@ class User(db.Model):
     def __repr__(self):
         return f'User {self.username}'
     
-class UserSchema(Schema):
-        id = fields.Int()
-        username = fields.String(required=True)
-        role = fields.String(required=True)
-        created_at = fields.String()
-
-        jobs = fields.List(fields.Nested(lambda: JobSchema(exclude=("user",))))
-        # labor_entries = fields.List(fields.Nested(lambda: LaborEntrySchema(exclude=("user",))))
-        reorder_requests = fields.List(fields.Nested(lambda: ReorderRequestSchema(exclude=("user",))))
 
 class Job(db.Model):
     __tablename__ = 'jobs'
@@ -65,7 +54,6 @@ class Job(db.Model):
     created_at = db.Column(db.DateTime, default=lambda:datetime.now(timezone.utc))
     status = db.Column(db.String, nullable=False)
     payment_status = db.Column(db.String, nullable=False)
-    # total_job_cost = db.Column(db.Numeric(10, 2), default=0.00)
 
     user = db.relationship('User', back_populates='jobs')
     labor_entries = db.relationship('LaborEntry', back_populates='job', cascade="all, delete-orphan",)
@@ -84,7 +72,6 @@ class Job(db.Model):
     @property
     def total_job_cost(self):
         return self.labor_cost + self.material_cost
-
 
     @validates('status')
     def validate_status(self, key, value):
@@ -110,23 +97,6 @@ class Job(db.Model):
         return f'<Name: {self.name}, Customer: {self.customer}, Created At: {self.created_at}, Status: {self.status}, Payment Status: {self.payment_status}>'
         
 
-class JobSchema(Schema):
-    id = fields.Int()
-    name = fields.String(required=True)
-    customer = fields.String(required=True)
-    created_at = fields.String()
-    status = fields.String(required=True)
-    payment_status = fields.String(required=True)
-    total_job_cost = fields.Decimal(places=2, as_string=True)
-
-    user = fields.Nested(UserSchema(exclude=("jobs",)))
-    labor_cost = fields.Function(lambda job: round(float(job.labor_cost), 2))
-    material_cost = fields.Function(lambda job: round(float(job.material_cost), 2))
-    total_job_cost = fields.Function(lambda job: round(float(job.total_job_cost), 2))
-
-    # labor_entries = fields.List(fields.Nested(lambda: LaborEntrySchema(exclude=("job",))))
-    # job_material_usages = fields.List(fields.Nested(lambda: JobMaterialUsageSchema(exclude=("job",))))
-
 class LaborEntry(db.Model):
     __tablename__ = 'labor_entries'
 
@@ -141,14 +111,6 @@ class LaborEntry(db.Model):
 
     def __repr__(self):
         return f"<Hours: {self.hours}, Hourly Rate: {self.hourly_rate}>"
-    
-class LaborEntrySchema(Schema):
-    id = fields.Int()
-    hours = fields.Int(required=True)
-    hourly_rate = fields.Decimal(places=2, as_string=True)
-
-    # user = fields.Nested(UserSchema(exclude=("labor_entries", "jobs")))
-    # job = fields.Nested(JobSchema(exclude=("labor_entries",)))
 
 class JobMaterialUsage(db.Model):
     __tablename__ = 'job_material_usages'
@@ -164,14 +126,6 @@ class JobMaterialUsage(db.Model):
 
     def __repr__(self):
         return f"<Quantity Used: {self.quantity_used}>"
-    
-class JobMaterialUsageSchema(Schema):
-    id = fields.Int()
-    quantity_used = fields.Decimal(places=5, as_string=True)
-
-    # job = fields.Nested(JobSchema(exclude=("job_material_usages",)))
-    material_lot = fields.Nested(lambda: MaterialLotSchema(exclude=("job_material_usages",)))
-
 
 class MaterialLot(db.Model):
     __tablename__ = 'material_lots'
@@ -185,16 +139,6 @@ class MaterialLot(db.Model):
 
     job_material_usages = db.relationship('JobMaterialUsage', back_populates="material_lot")
     material = db.relationship('Material', back_populates="material_lots")
-
-class MaterialLotSchema(Schema):
-    id = fields.Int()
-    quantity_purchased = fields.Decimal(places=5, as_string=True)
-    unit_cost = fields.Decimal(places=2, as_string=True)
-    quantity_remaining = fields.Decimal(places=5, as_string=True)
-    created_at = fields.String()
-
-    job_material_usages = fields.List(fields.Nested(JobMaterialUsageSchema(exclude=("material_lot",))))
-    material = fields.Nested(lambda: MaterialSchema(exclude=("material_lots",)))
 
 class Material(db.Model):
     __tablename__ = 'materials'
@@ -213,22 +157,19 @@ class Material(db.Model):
         db.UniqueConstraint('sku', name='uq_material_sku'),
         )
 
+    @property
+    def low_stock(self):
+        return sum([lot.quantity_remaining for lot in self.material_lots]) < self.reorder_point
+
+    @property
+    def is_available(self):
+        return sum([lot.quantity_remaining for lot in self.material_lots]) > 0
+
     @validates('sku')
     def validate_status(self, key, value):
         if len(value) > 50:
             raise ValueError("SKU must be 50 characters or less")
         return value
-
-class MaterialSchema(Schema):
-    id = fields.Int()
-    name = fields.Str(required=True)
-    sku = fields.String(required=True)
-    unit_measure = fields.Str()
-    distributor = fields.Str()
-    reorder_point = fields.Decimal(places=5, as_string=True)
-
-    material_lots = fields.List(fields.Nested(MaterialLotSchema(exclude=("material",))))
-    reorder_requests = fields.List(fields.Nested(lambda: ReorderRequestSchema(exclude=("material",))))
 
 class ReorderRequest(db.Model):
     __tablename__ = 'reorder_requests'
@@ -245,24 +186,13 @@ class ReorderRequest(db.Model):
 
     @validates('status')
     def validate_payment_status(self, key, value):
-        valid_statuses = ["PENDING", "APPROVED", "DISMISSED"]
-        if value == "":
+        valid_statuses = ["PENDING", "COMPLETED", "DISMISSED"]
+        if value == "": 
             raise ValueError("Status must be included")
         if value in valid_statuses:
             return value
         else:
             raise ValueError("Status must contain. one of three valid statuses.")
-
-class ReorderRequestSchema(Schema):
-    id = fields.Int()
-    status = fields.Str(required=True)
-    notes = fields.Str()
-    created_at = fields.String()
-
-    user = fields.Nested(UserSchema(exclude=("reorder_requests",)))
-    material = fields.Nested(MaterialSchema(exclude=("reorder_requests",)))
-
-
 
 
 
