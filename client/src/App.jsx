@@ -1,20 +1,26 @@
 import { useEffect, useState } from "react";
 import LoginSignup from "./pages/LoginSignup"
+import ProtectedRoute from "./components/ProtectedRoute"
+import Dashboard from "./pages/Dashboard"
+import { Routes, Route } from "react-router-dom";
 
 function App() {
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    fetch("http://localhost:5000/api/data")
-      .then((res) => res.json())
-      .then((data) => setMessage(data.message));
-  }, []);
 
   return (
-    <div>
-      <h1>Backend Status: {message}</h1>
+    <Routes>
+      <Route path="/login" element={<LoginSignup />} />
 
-    </div>
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* add more protected routes the same way */}
+    </Routes>
   );
 }
 export default App;

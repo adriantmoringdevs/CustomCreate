@@ -1,7 +1,7 @@
 import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "./AuthContext"
+import { useAuth } from "../context/UserContext"
 
-export function ProtectedRoute({ children }) {
+export default function ProtectedRoute({ children }) {
     const { user, isLoading } = useAuth();
     const location = useLocation();
 
@@ -12,3 +12,4 @@ export function ProtectedRoute({ children }) {
     }
     return children;
 }
+

@@ -1,36 +1,38 @@
 import { useState } from "react";
 import { useAuth } from "../context/UserContext";
-import { Button } from "../styles";
+// import { Button } from "../styles";
 import LoginForm from "../components/LoginForm";
-import SignUpForm from "../components/SignUpForm";
+import SignupForm from "../components/SignupForm";
 
-function Login() {
-  const { user, isLoading, login, signup, logout } = useAuth();
+function LoginSignup() {
+  const { isLoading, login, signup, logout } = useAuth();
   const [showLogin, setShowLogin] = useState(true);
 
   return (
     <div>
-      {showLogin ? (
+      {showLogin?(
         <>
           <LoginForm login={login} isLoading={isLoading} />
           <p>
             Don't have an account? &nbsp;
-            <Button color="secondary" onClick={() => setShowLogin(false)}>
+            <button color="secondary" onClick={() => setShowLogin(false)}>
               Sign Up
-            </Button>
+            </button>
           </p>
         </>
-      ) : (
+      ):(
         <>
-          <SignUpForm signup={signup} isLoading={isLoading} />
+          <SignupForm signup={signup} isLoading={isLoading} />
           <p>
             Already have an account? &nbsp;
-            <Button color="secondary" onClick={() => setShowLogin(true)}>
+            <button color="secondary" onClick={() => setShowLogin(true)}>
               Log In
-            </Button>
+            </button>
           </p>
         </>
       )}
     </div>
   );
 }
+
+export default LoginSignup

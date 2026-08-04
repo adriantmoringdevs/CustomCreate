@@ -3,7 +3,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 const AuthContext = createContext(null);
 const API_URL = "http://localhost:5000/api";
 
-export function AuthProvider({ children }) {
+export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -31,7 +31,9 @@ export function AuthProvider({ children }) {
   const login = async (username, password) => {
     const res = await fetch(`${API_URL}/login`, {
       method: "POST",
-      headers: { "Content-Type": application / json },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ username, password }),
     });
     if (!res.ok) throw new Error("Invalid credentials");
@@ -44,7 +46,9 @@ export function AuthProvider({ children }) {
   const signup = async (username, passsword, role) => {
     const res = await fetch(`${API_URL}/signup`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ username, password, role }),
     });
     if (!res.ok) {
