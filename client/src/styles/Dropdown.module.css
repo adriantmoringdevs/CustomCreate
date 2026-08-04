@@ -1,0 +1,23 @@
+container { 
+    position: 'relative';
+    display: 'inline-block';
+    font-family: 'Arial' }
+  button { padding: 10px 20px;
+     cursor: 'pointer';
+     min-width: '150px';
+      text-align: 'left' }
+  menu { 
+    position: 'absolute';
+     top: '100%';
+      left: 0;
+      margin: '5px 0 0 0';
+       padding: 0;
+    background-color: '#fff';
+     border: 1px solid #ccc;
+      list-style: 'none';
+       min-width: '150px';
+        z-index: 10
+  }
+  menuItem { padding: '10px 20px';
+     cursor: 'pointer';
+    border-bottom: '1px solid #eee' }

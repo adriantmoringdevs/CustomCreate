@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import LoginSignup from "./pages/LoginSignup"
 
 function App() {
   const [message, setMessage] = useState("");
@@ -12,6 +13,7 @@ function App() {
   return (
     <div>
       <h1>Backend Status: {message}</h1>
+
     </div>
   );
 }

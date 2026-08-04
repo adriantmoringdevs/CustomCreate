@@ -1,14 +1,14 @@
 import { Button, Error, FormField, Input, Label, Textarea } from "../styles";
 import React, { useState } from "react";
+import Dropdown from "./Dropdown";
 
 function SignUpForm({ signup, isLoading }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
     const [error, setError] = useState(null);
-    // const [submitting, setSubmitting] = useState(false);
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
         setErrors([]);
         setSubmitting(true);
@@ -20,7 +20,11 @@ function SignUpForm({ signup, isLoading }) {
             setSubmitting(false)
         }
 
-        // const isBusy = isLoading || submitting;
+        function handleRoleChange (e) {
+            setRole(e.target.value)
+        }
+
+        const roles = ['MANAGER', 'EMPLOYEE']
 
         return (
             <form onSubmit={handleSubmit}>
@@ -46,10 +50,16 @@ function SignUpForm({ signup, isLoading }) {
                 </FormField>
                 <FormField>
                     <Label htmlFor="role">Role</Label>
-                    <Input
-                    type="dropdown"
-
+                    <Dropdown items={roles} handleChange={handleRoleChange}></Dropdown>
                 </FormField>
+                      <FormField>
+                        <Button type="submit">{isLoading ? "Loading..." : "Sign Up"}</Button>
+                        </FormField>
+                        <FormField>
+                        {errors.map((err) => (
+                        <Error key={err}>{err}</Error>
+        ))}
+      </FormField>    
             </form>
         )
     }
