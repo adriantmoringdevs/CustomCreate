@@ -43,7 +43,7 @@ export function UserProvider({ children }) {
     return data.user;
   };
 
-  const signup = async (username, passsword, role) => {
+  const signup = async (username, password, role) => {
     const res = await fetch(`${API_URL}/signup`, {
       method: "POST",
       headers: {

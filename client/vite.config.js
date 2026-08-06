@@ -7,7 +7,8 @@ export default defineConfig({
     host: true, // 👈 This exposes the server to the Docker network
     port: 5173, // (Optional) Explicitly pin the port
     watch: {
-      usePolling: true // 👈 (Optional) Fixes hot-reload issues in Docker
+      usePolling: true, // 👈 (Optional) Fixes hot-reload issues in Docker
+      interval: 100
     }
   }
 })
