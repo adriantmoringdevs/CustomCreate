@@ -9,28 +9,30 @@ function LoginSignup() {
   const [showLogin, setShowLogin] = useState(true);
 
   return (
-    <div>
-      {showLogin?(
-        <>
-          <LoginForm login={login} isLoading={isLoading} />
-          <p>
-            Don't have an account? &nbsp;
-            <button color="secondary" onClick={() => setShowLogin(false)}>
-              Sign Up
-            </button>
-          </p>
-        </>
-      ):(
-        <>
-          <SignupForm signup={signup} isLoading={isLoading} />
-          <p>
-            Already have an account? &nbsp;
-            <button color="secondary" onClick={() => setShowLogin(true)}>
-              Log In
-            </button>
-          </p>
-        </>
-      )}
+    <div className="auth-page">
+      <div className="auth-card">
+        {showLogin?(
+          <>
+            <LoginForm login={login} isLoading={isLoading} />
+            <p>
+              Don't have an account? &nbsp;
+              <button color="secondary" onClick={() => setShowLogin(false)}>
+                Sign Up
+              </button>
+            </p>
+          </>
+        ):(
+          <>
+            <SignupForm signup={signup} isLoading={isLoading} />
+            <p>
+              Already have an account? &nbsp;
+              <button color="secondary" onClick={() => setShowLogin(true)}>
+                Log In
+              </button>
+            </p>
+          </>
+        )}
+      </div>
     </div>
   );
 }

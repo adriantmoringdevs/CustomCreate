@@ -21,7 +21,7 @@ function LoginForm({ login }) {
   
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="auth-form" onSubmit={handleSubmit}>
         <label htmlFor="username">Username</label>
         <input
           type="text"

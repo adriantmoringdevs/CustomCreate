@@ -1,9 +1,7 @@
-// import { Button, Error, FormField, Input, Label, Textarea } from "../styles";
 import React, { useState } from "react";
-import Dropdown from "./Dropdown/Dropdown";
-import { useNavigate } from "react-router-dom"
-import DropDownItem from "./DropdownItem/DropdownItem";
-
+import Dropdown from "./DropdownContainer/Dropdown/Dropdown";
+import { useNavigate } from "react-router-dom";
+import DropdownItem from "./DropdownContainer/DropdownItem/DropdownItem";
 
 function SignupForm({ signup, isLoading }) {
   const [username, setUsername] = useState("");
@@ -15,10 +13,9 @@ function SignupForm({ signup, isLoading }) {
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
-    console.log("submitting")
     try {
       await signup(username, password, role);
-      navigate("/dashboard", { replace: true })
+      navigate("/dashboard", { replace: true });
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
     }
@@ -31,9 +28,9 @@ function SignupForm({ signup, isLoading }) {
   const roles = ["MANAGER", "EMPLOYEE"];
 
   return (
-    <div>
-      <p>Hello from signup!</p>
-      <form onSubmit={handleSubmit}>
+    <>
+      <h2 className="auth-title">Create an account</h2>
+      <form className="auth-form" onSubmit={handleSubmit}>
         <label htmlFor="username">Username</label>
         <input
           type="text"
@@ -52,20 +49,23 @@ function SignupForm({ signup, isLoading }) {
           autoComplete="current-password"
         />
 
-        <label htmlFor="role">Role</label>
-        <Dropdown content={
-          <>
-            {roles.map(role => (
-              <DropDownItem key={role}>{`Role ${role}`}</DropDownItem>
-            ))}
+        <label>Role</label>
+        <Dropdown
+          buttonText={role || "Select a role"}
+          content={
+            <>
+              {roles.map((role, id) => (
+                <DropdownItem key={id} onClick={() => handleRoleChange(role)}>{`${role}`}</DropdownItem>
+              ))}
             </>
-          } handleChange={handleRoleChange} buttonText="Dropdown Button" />
+          }
+        />
 
         <button type="submit">{isLoading ? "Loading..." : "Sign Up"}</button>
 
         {error && <p>{error}</p>}
       </form>
-    </div>
+    </>
   );
 }
 

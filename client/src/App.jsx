@@ -18,7 +18,6 @@ function App() {
         }
       />
 
-      {/* add more protected routes the same way */}
     </Routes>
   );
 }
