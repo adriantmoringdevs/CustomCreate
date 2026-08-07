@@ -1,18 +1,17 @@
 .table-wrapper {
   width: 100%;
+  overflow-x: auto;
 }
 .table {
-  display: block;
-  overflow: hidden;
   table-layout: fixed;
   border-collapse: collapse;
   box-shadow: 0px 10px 10px #ccc;
   border-radius: 10px;
+  overflow: hidden;
   white-space: nowrap;
-  width: 100em;
-  max-width: 80%;
+  width: 100%;
+  min-width: 60em;
   margin: auto;
-  overflow-x: auto;
 }
 
 .table thead {
@@ -31,12 +30,16 @@
   text-overflow: ellipsis;
 }
 
+.table tbody tr {
+  cursor: pointer;
+}
+
 .table tbody tr:hover {
   background-color: #eee;
 }
 
 .expand {
-  width: 50%;
+  width: 20%;
 }
 
 .edit-btn {

@@ -125,6 +125,13 @@ class JobByID(Resource):
         job = Job.query.filter(Job.id == job_id).first()
         return JobSchema().dump(job), 200
 
+class JobMaterialUsagesByJobId(Resource):
+    @jwt_required()
+    def get(self, job_id):
+        job_material_usages = JobMaterialUsage.query.filter(JobMaterialUsage.job_id == job_id).all()
+        return JobMaterialUsageSchema(many=True).dump(job_material_usages), 200
+
+
 class Materials(Resource):
     @jwt_required()
     def get(self):
@@ -426,6 +433,7 @@ api.add_resource(WhoAmI, '/api/me', endpoint='me')
 api.add_resource(Login, '/api/login', endpoint='login')
 api.add_resource(Jobs, '/api/jobs', endpoint='jobs')
 api.add_resource(JobByID, '/api/jobs/<int:job_id>')
+api.add_resource(JobMaterialUsagesByJobId, '/api/jobs/<int:job_id>/job_material_usages', endpoint='job_material_usages')
 api.add_resource(Materials, '/api/materials', endpoint='materials')
 api.add_resource(OrderInventoryMaterial, '/api/materials/order')
 api.add_resource(OrderJobMaterial, '/api/jobs/<int:job_id>/materials/order')

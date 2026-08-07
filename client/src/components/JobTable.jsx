@@ -1,10 +1,18 @@
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
 import "../styles/JobTable.css"
 
 function JobTable() {
     const [jobs, setJobs] = useState([]);
     const [isLoading, setIsLoading] = useState(true)
+    const navigate = useNavigate();
+
+    function convertTime(rawTime) {
+        const fixedString = rawTime.replace(" ", "T").replace(/(\d{2}):(\d{6})$/, ".$1$2");
+        const dateObj = new Date(fixedString);
+        return dateObj.toLocaleString();
+    }
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -18,11 +26,15 @@ function JobTable() {
             .then((data) => setJobs(data))
             .finally(() => setIsLoading(false))
         }, []);
+
+        
     
         return (
 
         <div className="table-wrapper">
+        <h1>Jobs</h1>
         <table className="table">
+        
         <thead>
           <tr>
             <th scope="col" className="expand">
@@ -34,54 +46,21 @@ function JobTable() {
             <th scope="col">Created-At</th>
             <th scope="col">Status</th>
             <th scope="col">Payment-Status</th>
-            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
           {jobs.map((job, idx) => (
-            <tr key={idx}>
+            <tr key={idx} onClick={() => navigate(`/jobs/${job.id}`)}>
               <th scope="row">{job.name}</th>
               <td>{job.customer}</td>
-              <td>{job.created_at}</td>
+              <td>{convertTime(job.created_at)}</td>
               <td>{job.status}</td>
               <td>{job.payment_status}</td>
-              <td>
-              <span className="actions">
-                <BsFillPencilFill className="edit-btn"  />
-              </span>
-              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-            // <div className="widgetLg">
-            //     <h3 className="widgetLgTitle">Jobs</h3>
-            //     <table className="widgetLgTable">
-            //     <thead>
-            //         <tr className="widgetLgTr">
-            //             <th className="widgetLgTh">Name</th>
-            //             <th className="widgetLgTh">Customer</th>
-            //             <th className="widgetLgTh">Created-At</th>
-            //             <th className="widgetLgTh">Status</th>
-            //             <th className="widgetLgTh">Payment-Status</th>
-            //         </tr>
-            //         </thead>
-            //         <tbody>
-            //         {jobs && 
-            //         jobs.map((job, idx) => (
-            //             <tr key={idx}>
-            //             <td className="widgetLgUser">{job.name}</td>
-            //             <td className="widgetLgCustomer">{job.customer}</td>
-            //             <td className="widgetLgCreated">{job.created_at}</td>
-            //             <td className="widgetLgStatus">{job.status}</td>
-            //             <td className="widgetLgPaymentStatus">{job.payment_status}</td>
-
-            //             </tr>
-            //         ))}
-            //         </tbody>
-            //     </table>
-            // </div>
         )
 }
 

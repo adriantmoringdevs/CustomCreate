@@ -40,7 +40,7 @@ class JobMaterialUsageSchema(Schema):
     quantity_used = fields.Decimal(places=5, as_string=True)
 
     # # job = fields.Nested(JobSchema(exclude=("job_material_usages",)))
-    # material_lot = fields.Nested(lambda: MaterialLotSchema(exclude=("job_material_usages",)))
+    material_lot = fields.Nested(lambda: MaterialLotSchema(exclude=("job_material_usages",)))
 
 class MaterialLotSchema(Schema):
     id = fields.Int()
@@ -49,8 +49,8 @@ class MaterialLotSchema(Schema):
     quantity_remaining = fields.Decimal(places=5, as_string=True)
     created_at = fields.String()
 
-    # job_material_usages = fields.List(fields.Nested(JobMaterialUsageSchema(exclude=("material_lot",))))
-    # material = fields.Nested(lambda: MaterialSchema(exclude=("material_lots",)))
+    job_material_usages = fields.List(fields.Nested(JobMaterialUsageSchema(exclude=("material_lot",))))
+    material = fields.Nested(lambda: MaterialSchema(exclude=("material_lots",)))
 
 class MaterialSchema(Schema):
     id = fields.Int()
@@ -60,7 +60,7 @@ class MaterialSchema(Schema):
     distributor = fields.Str()
     reorder_point = fields.Decimal(places=5, as_string=True)
 
-    # material_lots = fields.List(fields.Nested(MaterialLotSchema(exclude=("material",))))
+    material_lots = fields.List(fields.Nested(MaterialLotSchema(exclude=("material",))))
     # reorder_requests = fields.List(fields.Nested(lambda: ReorderRequestSchema(exclude=("material",))))
     low_stock = fields.Function(lambda material: material.low_stock)
     is_available = fields.Function(lambda material: material.is_available)
