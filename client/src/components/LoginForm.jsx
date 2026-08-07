@@ -13,7 +13,7 @@ function LoginForm({ login }) {
     setError("");
     try {
       await login(username, password);
-      navigate("/dashboard", { replace:true })
+      navigate("/", { replace:true })
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
     }

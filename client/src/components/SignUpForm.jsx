@@ -15,7 +15,7 @@ function SignupForm({ signup, isLoading }) {
     setError("");
     try {
       await signup(username, password, role);
-      navigate("/dashboard", { replace: true });
+      navigate("/", { replace: true });
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
     }
