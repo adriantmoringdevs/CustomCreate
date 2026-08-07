@@ -3,7 +3,7 @@ WORKDIR /app
 # Clean slate for native module bindings
 RUN rm -rf node_modules package-lock.json
 COPY package*.json .
-RUN npm install --build-from-source
+RUN npm install --build-from-source --legacy-peer-deps
 COPY . .
 EXPOSE 3000
 CMD ["npm", "run", "dev", "--", "--host"]

@@ -5,7 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import AppLayout from "./components/layout/AppLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 // import stubs for the rest as you build them:
-// import JobList from "./pages/JobList";
+import JobList from "./pages/JobList";
 // import JobById from "./pages/JobById";
 // import MaterialList from "./pages/MaterialList";
 // import MaterialDetail from "./pages/MaterialDetail";
@@ -25,7 +25,7 @@ function App() {
         }
       >
         <Route path="/" element={<Dashboard />} />
-        {/* <Route path="/jobs" element={<JobList />} /> */}
+        <Route path="/jobs" element={<JobList />} />
         {/* <Route path="/jobs/:id" element={<JobById />} /> */}
         {/* <Route path="/materials" element={<MaterialList />} /> */}
         {/* <Route path="/materials/:id" element={<MaterialDetail />} /> */}
