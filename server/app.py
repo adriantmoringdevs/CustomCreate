@@ -186,7 +186,21 @@ class Materials(Resource):
             return {"status": "deleted"}, 200
         except IntegrityError:
             return {'errors': ['422 Unprocessable Entity']}, 422
-     
+
+class AvailableMaterialLots(Resource):
+    @jwt_required()
+    def get(self):
+        available_material_ids = []
+        materials = Material.query.all()
+        for material in materials:
+            if material.is_available:
+                available_material_ids.append(material.id)
+
+        
+        material_lots = MaterialLot.query.filter(MaterialLot.material_id.in_(available_material_ids)).all()
+        print(material_lots)
+        return MaterialLotSchema(many=True).dump(material_lots), 200
+             
 class OrderJobMaterial(Resource):
     @jwt_required()
     @check_role
@@ -435,6 +449,7 @@ api.add_resource(Jobs, '/api/jobs', endpoint='jobs')
 api.add_resource(JobByID, '/api/jobs/<int:job_id>')
 api.add_resource(JobMaterialUsagesByJobId, '/api/jobs/<int:job_id>/job_material_usages', endpoint='job_material_usages')
 api.add_resource(Materials, '/api/materials', endpoint='materials')
+api.add_resource(AvailableMaterialLots, '/api/materials/available', endpoint='available')
 api.add_resource(OrderInventoryMaterial, '/api/materials/order')
 api.add_resource(OrderJobMaterial, '/api/jobs/<int:job_id>/materials/order')
 api.add_resource(UseMaterialLot, '/api/jobs/<int:job_id>/materials/use', endpoint='use')
