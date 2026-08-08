@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
-import "../styles/JobTable.css"
+import "./JobsTable.css"
 
-function JobTable() {
+function JobsTable() {
     const [jobs, setJobs] = useState([]);
     const [isLoading, setIsLoading] = useState(true)
     const navigate = useNavigate();
@@ -64,4 +64,4 @@ function JobTable() {
         )
 }
 
-export default JobTable;
+export default JobsTable;

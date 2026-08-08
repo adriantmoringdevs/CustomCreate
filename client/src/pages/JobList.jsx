@@ -1,9 +1,9 @@
-import JobTable from "../components/JobTable";
+import JobsTable from "../components/tables/JobsTable";
 
 function JobList() {
     return (
         <div>
-            <JobTable />
+            <JobsTable />
         </div>
     )
 }

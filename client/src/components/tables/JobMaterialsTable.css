@@ -1,0 +1,76 @@
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+.table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  box-shadow: 0px 10px 10px #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  min-width: 45em;
+  margin: auto;
+}
+
+.table thead {
+  background-color: #ccc;
+  color: #222;
+}
+
+.table th,
+.table td {
+  padding: 0.8rem;
+  text-align: left;
+  font-weight: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table thead th {
+  font-weight: bold;
+}
+
+.table td {
+  border-top: 0.5px solid #ddd;
+}
+
+.table tbody tr {
+  cursor: pointer;
+}
+
+.table tbody tr:hover {
+  background-color: #eee;
+}
+
+/* column widths matched to content: Name, Quantity Used, SKU #, Unit/Measure, Distributor */
+.table th:nth-child(1),
+.table td:nth-child(1) {
+  width: 30%;
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2) {
+  width: 15%;
+  text-align: right;
+}
+
+.table th:nth-child(3),
+.table td:nth-child(3) {
+  width: 15%;
+}
+
+.table th:nth-child(4),
+.table td:nth-child(4) {
+  width: 20%;
+}
+
+.table th:nth-child(5),
+.table td:nth-child(5) {
+  width: 20%;
+}
+
+.edit-btn {
+  color: gray;
+}
