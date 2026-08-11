@@ -3,7 +3,7 @@
   overflow-x: auto;
 }
 .table {
-  table-layout: fixed;
+  table-layout: auto;
   border-collapse: collapse;
   box-shadow: 0px 10px 10px #ccc;
   border-radius: 10px;
@@ -32,7 +32,7 @@
 
 .table tbody tr {
   cursor: pointer;
-}
+} 
 
 .table tbody tr:hover {
   background-color: #eee;
@@ -44,4 +44,20 @@
 
 .edit-btn {
   color: gray;
+}
+
+.nav-btn {
+  color: green;
+}
+
+.delete-btn {
+  color: red;
+}
+
+.actions-col {
+  width: 10%;
+}
+
+.to-job-col {
+  width: 10%;
 }
