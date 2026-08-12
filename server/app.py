@@ -250,12 +250,12 @@ class OrderJobMaterial(Resource):
 
         try:
             db.session.commit()
-            result = {
-            "material": material,
-            "material_lot": material_lot,
-            "job_material_usage": job_material_usage
-            }
-            return OrderJobMaterialSchema().dump(result), 201
+            # result = {
+            # "material": material,
+            # "material_lot": material_lot,
+            # "job_material_usage": job_material_usage
+            # }
+            return JobMaterialUsageSchema().dump(job_material_usage), 201
         except IntegrityError:
             return {'errors': ['422 Unprocessable Entity']}, 422
 

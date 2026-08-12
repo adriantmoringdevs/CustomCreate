@@ -125,9 +125,6 @@ function JobList() {
       )}
       {deleteOpen && (
         <DeleteConfirm
-          closeDeleteConfirm={() => {
-            setDeleteOpen(false);
-          }}
           deleteJob={handleDeleteJob}
           jobToDelete={jobToDelete !== null && jobs[jobToDelete]}
         />
