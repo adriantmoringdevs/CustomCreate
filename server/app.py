@@ -200,7 +200,6 @@ class AvailableMaterialLots(Resource):
 
         
         material_lots = MaterialLot.query.filter(MaterialLot.material_id.in_(available_material_ids)).all()
-        print(material_lots)
         return MaterialLotSchema(many=True).dump(material_lots), 200
              
 class OrderJobMaterial(Resource):
@@ -307,8 +306,8 @@ class UseMaterialLot(Resource):
         request_json = request.get_json()
         material_lot = MaterialLot.query.filter(MaterialLot.id==request_json["material_lot_id"]).first()
         material = Material.query.filter(Material.id==material_lot.material_id).first()
-        if request_json["quantity_used"] <= material_lot.quantity_remaining:
-            material_lot.quantity_remaining = float(material_lot.quantity_remaining) - request_json["quantity_used"]
+        if float(request_json["quantity_used"]) <= material_lot.quantity_remaining:
+            material_lot.quantity_remaining = float(material_lot.quantity_remaining) - float(request_json["quantity_used"])
         else:
             return {'Quantity used must be smaller than or equal to Material Lot quantity remaining.'}
 
@@ -320,12 +319,8 @@ class UseMaterialLot(Resource):
         try:
             db.session.add(job_material_usage)
             db.session.commit()
-            result = {
-                "material": material,
-                "material_lot": material_lot,
-                "job_material_usage": job_material_usage
-            }
-            return UseMaterialLotSchema().dump(result), 201
+
+            return JobMaterialUsageSchema().dump(job_material_usage), 201
         except IntegrityError:
             return {'errors': ['422 Unprocessable Entity']}, 422
 

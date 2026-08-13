@@ -41,15 +41,36 @@ function JobById() {
       .finally(() => setIsLoading(false));
   }, []);
 
+   useEffect(() => {
+    const token = localStorage.getItem("token");
+    fetch("http://localhost:5000/api/materials/available", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Invalid token");
+        return res.json();
+      })
+      .then((data) => {
+        setAvailableLots(data);
+      })
+      .finally(() => setIsLoading(false));
+  }, [jobMaterialUsages]);
+
   function addUsage(newUse) {
     setJobMaterialUsage((prevUses) => [...prevUses, newUse]);
   }
+
+  
+
+  // function addLotToUse(newUse) {
+
+  // }
 
   return (
     <div>
       <JobMaterialsTable materials={jobMaterialUsages} />
       <div>
-        <AvailableLotsTable lots={availableLots} />
+        <AvailableLotsTable lots={availableLots} addUsage={addUsage} location={location}/>
       </div>
       <div>
         <button className="btn" onClick={() => setMaterialsFormOpen(true)}>
