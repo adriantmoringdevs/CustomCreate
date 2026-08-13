@@ -33,7 +33,7 @@ function AssignMaterialForm({ closeForm, lot, addUsage, location }) {
         throw new Error("New Usage post failed");
       })
       .then((data) => addUsage(data));
-      closeForm();
+    closeForm();
   }
 
   return (
@@ -49,8 +49,10 @@ function AssignMaterialForm({ closeForm, lot, addUsage, location }) {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <input
-              type="text"
-              placeholder="Quantity to Assign"
+              type="number"
+              min="0"
+              max={lot.quantity_remaining}
+              step="0.00001"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
             />

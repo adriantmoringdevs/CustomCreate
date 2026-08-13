@@ -249,11 +249,6 @@ class OrderJobMaterial(Resource):
 
         try:
             db.session.commit()
-            # result = {
-            # "material": material,
-            # "material_lot": material_lot,
-            # "job_material_usage": job_material_usage
-            # }
             return JobMaterialUsageSchema().dump(job_material_usage), 201
         except IntegrityError:
             return {'errors': ['422 Unprocessable Entity']}, 422
@@ -376,9 +371,9 @@ class LaborEntries(Resource):
 
 class LaborEntriesByJob(Resource):
     @jwt_required()
-    def get(self):
-        request_json = request.get_json()
-        labor_entries = LaborEntry.query.filter(LaborEntry.job_id==request_json["job_id"]).all()
+    def get(self, job_id):
+        # request_json = request.get_json()
+        labor_entries = LaborEntry.query.filter(LaborEntry.job_id==job_id).all()
         return LaborEntrySchema(many=True).dump(labor_entries), 200
      
 class LaborEntryByID(Resource):
@@ -451,7 +446,7 @@ api.add_resource(OrderInventoryMaterial, '/api/materials/order')
 api.add_resource(OrderJobMaterial, '/api/jobs/<int:job_id>/materials/order')
 api.add_resource(UseMaterialLot, '/api/jobs/<int:job_id>/materials/use', endpoint='use')
 api.add_resource(LaborEntries, '/api/labor_entries', endpoint='labor_entries')
-api.add_resource(LaborEntriesByJob, '/api/labor_entries_by_job', endpoint='labor_entries_by_job')
+api.add_resource(LaborEntriesByJob, '/api/jobs/<int:job_id>/labor_by_job', endpoint='labor_by_job')
 api.add_resource(LaborEntryByID, '/api/labor_entries/<int:labor_entry_id>')
 api.add_resource(ReorderRequests, '/api/reorder_requests', endpoint='reorder_requests')
 

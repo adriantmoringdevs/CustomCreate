@@ -6,9 +6,9 @@ class UserSchema(Schema):
     role = fields.String(required=True)
     created_at = fields.String()
 
-        # jobs = fields.List(fields.Nested(lambda: JobSchema(exclude=("user",))))
-        # # labor_entries = fields.List(fields.Nested(lambda: LaborEntrySchema(exclude=("user",))))
-        # reorder_requests = fields.List(fields.Nested(lambda: ReorderRequestSchema(exclude=("user",))))
+    # jobs = fields.List(fields.Nested(lambda: JobSchema(exclude=("user",))))
+    labor_entries = fields.List(fields.Nested(lambda: LaborEntrySchema(exclude=("user",))))
+    # reorder_requests = fields.List(fields.Nested(lambda: ReorderRequestSchema(exclude=("user",))))
 
 class JobSchema(Schema):
     id = fields.Int()
@@ -32,7 +32,7 @@ class LaborEntrySchema(Schema):
     hours = fields.Int(required=True)
     hourly_rate = fields.Decimal(places=2, as_string=True)
 
-    # user = fields.Nested(UserSchema(exclude=("labor_entries", "jobs")))
+    user = fields.Nested(UserSchema(exclude=("labor_entries",)))
     # job = fields.Nested(JobSchema(exclude=("labor_entries",)))
     
 class JobMaterialUsageSchema(Schema):
