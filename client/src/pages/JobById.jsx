@@ -5,6 +5,7 @@ import JobMaterialsTable from "../components/tables/JobMaterialsTable.jsx";
 import JobMaterialsForm from "../components/forms/JobMaterialsForm.jsx";
 import LaborTable from "../components/tables/LaborTable.jsx";
 import LaborForm from "../components/forms/LaborForm.jsx";
+import EditLaborForm from "../components/forms/EditLaborForm.jsx";
 
 function JobById() {
   const [jobMaterialUsages, setJobMaterialUsage] = useState([]);
@@ -13,6 +14,8 @@ function JobById() {
   const [isLoading, setIsLoading] = useState(true);
   const [materialsFormOpen, setMaterialsFormOpen] = useState(false);
   const [laborFormOpen, setLaborFormOpen] = useState(false);
+  const [laborToEdit, setLaborToEdit] = useState(null);
+  const [editLaborFormOpen, setEditLaborFormOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -83,9 +86,38 @@ function JobById() {
     setLaborEntries((prevEntries) => [...prevEntries, newEntry]);
   }
 
+  function handleEditLabor(idx) {
+    setLaborToEdit(idx);
+    setEditLaborFormOpen(true);
+  }
+
+  function saveEditedLabor(entry) {
+    const token = localStorage.getItem("token");
+    fetch("http://localhost:5000/api/labor_entries", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: "include",
+      body: JSON.stringify(entry),
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error(`Failed to update entry ${entry.id}`);
+      })
+      .then((data) => {
+        setLaborEntries((prevEntries) =>
+          prevEntries.map((entry) => (entry.id === data.id ? data : entry)),
+        );
+      });
+  }
+
   return (
     <div>
-      <LaborTable laborEntries={laborEntries} />
+      <LaborTable laborEntries={laborEntries} editLabor={handleEditLabor} />
       <JobMaterialsTable materials={jobMaterialUsages} />
       <div>
         <AvailableLotsTable
@@ -119,6 +151,17 @@ function JobById() {
             }}
             location={location}
             addLaborEntry={addLaborEntry}
+          />
+        )}
+      </div>
+      <div>
+        {editLaborFormOpen && (
+          <EditLaborForm
+            saveEditedLabor={saveEditedLabor}
+            closeForm={() => {
+              setEditLaborFormOpen(false);
+            }}
+            laborToEdit={laborToEdit !== null && laborEntries[laborToEdit]}
           />
         )}
       </div>

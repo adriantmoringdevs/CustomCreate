@@ -345,8 +345,8 @@ class LaborEntries(Resource):
 
         if not labor_entry:
             return {'error': 'Labor Entry not found.'}, 404
-        if current_id != labor_entry.user_id:
-            return {'error': 'Only user who made labor entry can edit entry.'}
+        if int(current_id) != labor_entry.user_id:
+            return {'error': 'Only user who made labor entry can edit entry.'}, 403
         
         labor_entry.hours = request_json["hours"]
         labor_entry.hourly_rate = request_json["hourly_rate"]

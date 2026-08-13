@@ -89,8 +89,8 @@ function JobList() {
         );
       })
       .catch((err) => {
-        console.error("Error deleting job:", err)
-      })
+        console.error("Error deleting job:", err);
+      });
   }
 
   return (

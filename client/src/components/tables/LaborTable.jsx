@@ -7,9 +7,8 @@ import {
 // import { useAuth } from "../context/UserContext";
 
 
-function LaborTable({ laborEntries }) {
-    console.log(laborEntries)
-  // const { user } = useAuth();
+function LaborTable({ laborEntries, editLabor }) {
+
   return (
     <div className="table-wrapper">
       <h1>Labor Entries</h1>
@@ -23,8 +22,10 @@ function LaborTable({ laborEntries }) {
               Hours
             </th>
             <th scope="col">Hourly Rate</th>
-            {/* <th scope="col">Unit/Measure</th>
-            <th scope="col">Distributor</th> */}
+            <th scope="col" className="actions-col">
+              Actions
+            </th>
+
           </tr>
         </thead>
         <tbody>
@@ -33,8 +34,14 @@ function LaborTable({ laborEntries }) {
               <th scope="row">{entry.user.username}</th>
               <td>{entry.hours}</td>
               <td>{entry.hourly_rate}</td>
-              {/* <td>{material.material_lot.material.unit_measure}</td>
-              <td>{material.material_lot.material.distributor}</td> */}
+              <td>
+                <span className="actions">
+                  <BsFillPencilFill
+                      className="edit-btn"
+                      onClick={() => editLabor(idx)}
+                    />
+                </span>
+              </td>
             </tr>
           ))}
         </tbody>
