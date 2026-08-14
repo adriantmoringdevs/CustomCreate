@@ -1,7 +1,8 @@
-function JobMaterialsTable({materials}) {
+function MaterialsTable({materials}) {
+
     return (
-        <div className="table-wrapper">
-        <h1>Job Materials</h1>
+               <div className="table-wrapper">
+        <h1>Inventory</h1>
         <table className="table">
     
         <thead>
@@ -10,21 +11,23 @@ function JobMaterialsTable({materials}) {
               Name
             </th>
             <th scope="col" className="expand">
-              Quantity Used:
+              Total Quantity Available
             </th>
             <th scope="col">SKU #</th>
             <th scope="col">Unit/Measure</th>
             <th scope="col">Distributor</th>
+            <th scope="col">Reorder Point</th>
           </tr>
         </thead>
         <tbody>
           {materials.map((material, idx) => (
             <tr key={idx}>
-              <th scope="row">{material.material_lot.material.name}</th>
-              <td>{material.quantity_used}</td>
-              <td>{material.material_lot.material.sku}</td>
-              <td>{material.material_lot.material.unit_measure}</td>
-              <td>{material.material_lot.material.distributor}</td>
+              <th scope="row">{material.name}</th>
+              <td>{material.total_quantity}</td>
+              <td>{material.sku}</td>
+              <td>{material.unit_measure}</td>
+              <td>{material.distributor}</td>
+              <td>{material.reorder_point}</td>
             </tr>
           ))}
         </tbody>
@@ -33,4 +36,4 @@ function JobMaterialsTable({materials}) {
     )
 }
 
-export default JobMaterialsTable;
+export default MaterialsTable;

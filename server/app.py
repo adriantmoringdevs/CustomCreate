@@ -61,6 +61,13 @@ class Login(Resource):
         if user and user.authenticate(password):
             token = create_access_token(identity=str(user.id))
             return make_response(jsonify(token=token, user=UserSchema().dump(user)), 201)
+
+class Users(Resource):
+    @jwt_required()
+    def get(self):
+        users = User.query.all()
+        return UserSchema(many=True).dump(users), 200
+ 
   
 # FULL CRUD on Jobs Model
 class Jobs(Resource):
@@ -188,6 +195,12 @@ class Materials(Resource):
             return {"status": "deleted"}, 200
         except IntegrityError:
             return {'errors': ['422 Unprocessable Entity']}, 422
+
+class MaterialTotals(Resource):
+    @jwt_required()
+    def get(self):
+        material_totals = []
+
 
 class AvailableMaterialLots(Resource):
     @jwt_required()
@@ -361,7 +374,10 @@ class LaborEntries(Resource):
     @jwt_required() 
     def delete(self):
         request_json = request.get_json()
-        labor_entry = LaborEntry.query.filter(LaborEntry.id==request_json["id"])
+        labor_entry = LaborEntry.query.get(request_json["id"])
+
+        if not labor_entry:
+            return {"errors": ["Labor entry not found"]}, 404
         try:
             db.session.delete(labor_entry)
             db.session.commit()
@@ -437,6 +453,7 @@ api.add_resource(Data, '/api/data', endpoint='data')
 api.add_resource(Signup, '/api/signup', endpoint='signup')
 api.add_resource(WhoAmI, '/api/me', endpoint='me')
 api.add_resource(Login, '/api/login', endpoint='login')
+api.add_resource(Users, '/api/users', endpoint='users')
 api.add_resource(Jobs, '/api/jobs', endpoint='jobs')
 api.add_resource(JobByID, '/api/jobs/<int:job_id>')
 api.add_resource(JobMaterialUsagesByJobId, '/api/jobs/<int:job_id>/job_material_usages', endpoint='job_material_usages')

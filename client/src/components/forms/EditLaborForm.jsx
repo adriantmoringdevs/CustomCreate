@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import "./JobForm.css";
 
 function EditLaborForm({saveEditedLabor, closeForm, laborToEdit}) {
     const [hours, setHours] = useState("");
@@ -27,7 +26,7 @@ function EditLaborForm({saveEditedLabor, closeForm, laborToEdit}) {
         if (e.target.className === "form-container") closeForm();
       }}>
         <div className="form">
-            Edit Labor Form
+            <h3 className="form-title">Edit Labor Entry</h3>
             <form onSubmit={handleSubmit}>
                 <div className='form-group'>
                     <input

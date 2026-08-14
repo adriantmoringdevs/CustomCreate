@@ -5,7 +5,6 @@ import {
   BsFillPencilFill,
   BsArrowRightSquareFill,
 } from "react-icons/bs";
-import "./JobsTable.css";
 
 function JobsTable({ user, jobs, editJob, deleteJob }) {
   const navigate = useNavigate();

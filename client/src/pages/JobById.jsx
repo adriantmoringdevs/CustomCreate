@@ -6,6 +6,7 @@ import JobMaterialsForm from "../components/forms/JobMaterialsForm.jsx";
 import LaborTable from "../components/tables/LaborTable.jsx";
 import LaborForm from "../components/forms/LaborForm.jsx";
 import EditLaborForm from "../components/forms/EditLaborForm.jsx";
+import DeleteLaborForm from "../components/forms/DeleteLaborForm.jsx";
 
 function JobById() {
   const [jobMaterialUsages, setJobMaterialUsage] = useState([]);
@@ -16,6 +17,8 @@ function JobById() {
   const [laborFormOpen, setLaborFormOpen] = useState(false);
   const [laborToEdit, setLaborToEdit] = useState(null);
   const [editLaborFormOpen, setEditLaborFormOpen] = useState(false);
+  const [laborToDelete, setLaborToDelete] = useState(null);
+  const [deleteLaborFormOpen, setDeleteLaborFormOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -115,56 +118,98 @@ function JobById() {
       });
   }
 
+  function handleDeleteLaborSelect(idx) {
+    setLaborToDelete(idx);
+    setDeleteLaborFormOpen(true);
+  }
+
+  function handleDeleteLabor(entryToDelete) {
+    const token = localStorage.getItem("token");
+    fetch("http://localhost:5000/api/labor_entries", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: "include",
+      body: JSON.stringify(entryToDelete),
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error("Labor Entry deletion failed");
+      })
+      .then(() => {
+        setLaborEntries((prevEntries) =>
+          prevEntries.filter((entry) => entry.id != entryToDelete.id),
+        );
+      })
+      .catch((err) => {
+        console.error("Error deleting Entry:", err);
+      });
+  }
+
   return (
-    <div>
-      <LaborTable laborEntries={laborEntries} editLabor={handleEditLabor} />
+    <div className="page-stack">
+      <LaborTable
+        laborEntries={laborEntries}
+        editLabor={handleEditLabor}
+        deleteLabor={handleDeleteLaborSelect}
+      />
       <JobMaterialsTable materials={jobMaterialUsages} />
-      <div>
-        <AvailableLotsTable
-          lots={availableLots}
-          addUsage={addUsage}
-          location={location}
-        />
-      </div>
-      <div>
+      <AvailableLotsTable
+        lots={availableLots}
+        addUsage={addUsage}
+        location={location}
+      />
+      <div className="page-actions">
         <button className="btn" onClick={() => setMaterialsFormOpen(true)}>
           Order New Job Materials
         </button>
-        {materialsFormOpen && (
-          <JobMaterialsForm
-            closeForm={() => {
-              setMaterialsFormOpen(false);
-            }}
-            addUsage={addUsage}
-            location={location}
-          />
-        )}
-      </div>
-      <div>
         <button className="btn" onClick={() => setLaborFormOpen(true)}>
           Log New Labor Entry
         </button>
-        {laborFormOpen && (
-          <LaborForm
-            closeForm={() => {
-              setLaborFormOpen(false);
-            }}
-            location={location}
-            addLaborEntry={addLaborEntry}
-          />
-        )}
       </div>
-      <div>
-        {editLaborFormOpen && (
-          <EditLaborForm
-            saveEditedLabor={saveEditedLabor}
-            closeForm={() => {
-              setEditLaborFormOpen(false);
-            }}
-            laborToEdit={laborToEdit !== null && laborEntries[laborToEdit]}
-          />
-        )}
-      </div>
+
+      {materialsFormOpen && (
+        <JobMaterialsForm
+          closeForm={() => {
+            setMaterialsFormOpen(false);
+          }}
+          addUsage={addUsage}
+          location={location}
+        />
+      )}
+      {laborFormOpen && (
+        <LaborForm
+          closeForm={() => {
+            setLaborFormOpen(false);
+          }}
+          location={location}
+          addLaborEntry={addLaborEntry}
+        />
+      )}
+      {editLaborFormOpen && (
+        <EditLaborForm
+          saveEditedLabor={saveEditedLabor}
+          closeForm={() => {
+            setEditLaborFormOpen(false);
+          }}
+          laborToEdit={laborToEdit !== null && laborEntries[laborToEdit]}
+        />
+      )}
+      {deleteLaborFormOpen && (
+        <DeleteLaborForm
+          deleteLabor={handleDeleteLabor}
+          laborToDelete={
+            laborToDelete !== null && laborEntries[laborToDelete]
+          }
+          closeForm={() => {
+            setDeleteLaborFormOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 }

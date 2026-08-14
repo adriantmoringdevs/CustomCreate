@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./JobForm.css";
 
 function JobMaterialsForm({ addUsage, location, closeForm }) {
   const [orderDetails, setOrderDetails] = useState({
@@ -65,7 +64,7 @@ function JobMaterialsForm({ addUsage, location, closeForm }) {
       }}
     >
       <div className="form">
-        Job Materials Form
+        <h3 className="form-title">Order New Job Materials</h3>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <input

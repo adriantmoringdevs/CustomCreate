@@ -158,12 +158,18 @@ class Material(db.Model):
         )
 
     @property
-    def low_stock(self):
-        return sum([lot.quantity_remaining for lot in self.material_lots]) < self.reorder_point
+    def total_quantity(self):
+        return sum(lot.quantity_remaining or 0 for lot in self.material_lots)
 
     @property
     def is_available(self):
-        return sum([lot.quantity_remaining for lot in self.material_lots]) > 0
+        return self.total_quantity > 0
+
+    @property
+    def low_stock(self):
+        if self.reorder_point is None:
+            return False
+        return self.total_quantity < self.reorder_point
 
     @validates('sku')
     def validate_status(self, key, value):

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Dropdown from "../DropdownContainer/Dropdown/Dropdown";
 import DropdownItem from "../DropdownContainer/DropdownItem/DropdownItem";
-import "./JobForm.css";
 
 function NewJobForm({ addJob, closeForm }) {
   const [name, setName] = useState("");
@@ -58,7 +57,7 @@ function NewJobForm({ addJob, closeForm }) {
       }}
     >
       <div className="form">
-        Create New Job
+        <h3 className="form-title">Create New Job</h3>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <input

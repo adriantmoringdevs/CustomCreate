@@ -21,7 +21,9 @@ function LoginForm({ login }) {
   
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit}>
+    <>
+      <h2 className="auth-title">Welcome back</h2>
+      <form className="auth-form" onSubmit={handleSubmit}>
         <label htmlFor="username">Username</label>
         <input
           type="text"
@@ -44,9 +46,9 @@ function LoginForm({ login }) {
           {isLoading ? "Loading..." : "Login"}
         </button>
 
-       {error && <p>{error}</p>}
-
-    </form>
+        {error && <p>{error}</p>}
+      </form>
+    </>
   );
 }
 

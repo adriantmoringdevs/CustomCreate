@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./JobForm.css";
 // import { useAuth } from "../context/UserContext";
 
 function LaborForm({ closeForm, location, addLaborEntry }) {
@@ -50,7 +49,7 @@ function LaborForm({ closeForm, location, addLaborEntry }) {
       }}
     >
       <div className="form">
-        LaborForm
+        <h3 className="form-title">Log New Labor Entry</h3>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <input

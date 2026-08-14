@@ -1,4 +1,3 @@
-import "./JobForm.css";
 import { useState } from "react";
 
 function AssignMaterialForm({ closeForm, lot, addUsage, location }) {
@@ -44,8 +43,10 @@ function AssignMaterialForm({ closeForm, lot, addUsage, location }) {
       }}
     >
       <div className="form">
-        Assign Material to Job Quantity Remaining:
-        {lot.quantity_remaining}
+        <h3 className="form-title">Assign Material to Job</h3>
+        <p className="form-subtitle">
+          Quantity remaining: {lot.quantity_remaining}
+        </p>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <input

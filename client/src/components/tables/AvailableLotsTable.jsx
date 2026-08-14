@@ -1,4 +1,3 @@
-import "./AvailableLotsTable.css";
 import { BsClipboardCheckFill } from "react-icons/bs";
 import { useState } from "react";
 import AssignMaterialForm from "../forms/AssignMaterialForm";

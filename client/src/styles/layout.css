@@ -48,13 +48,3 @@
     }
   }
 }
-
-.dashboard {
-  min-height: 100vh;
-  padding: var(--space-8);
-  background-color: var(--color-bg);
-
-  & h1 {
-    color: var(--color-text);
-  }
-}

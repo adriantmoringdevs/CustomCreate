@@ -20,7 +20,7 @@ function Sidebar() {
           <NavLink
             to="/"
             className={({ isActive }) =>
-              "sidebarListItem" + (isActive ? "active" : "")
+              "sidebarListItem" + (isActive ? " active" : "")
             }
           >
             <LineStyle className="sidebarIcon" />
@@ -29,7 +29,7 @@ function Sidebar() {
           <NavLink
             to="/jobs"
             className={({ isActive }) =>
-              "sidebarListItem" + (isActive ? "active" : "")
+              "sidebarListItem" + (isActive ? " active" : "")
             }
           >
             <WorkOutline className="sidebarIcon" />
@@ -38,7 +38,7 @@ function Sidebar() {
           <NavLink
             to="/materials"
             className={({ isActive }) =>
-              "sidebarListItem" + (isActive ? "active" : "")
+              "sidebarListItem" + (isActive ? " active" : "")
             }
           >
             <Storefront className="sidebarIcon" />
@@ -47,7 +47,7 @@ function Sidebar() {
           <NavLink
             to="/reorder-requests"
             className={({ isActive }) =>
-              "sidebarListItem" + (isActive ? "active" : "")
+              "sidebarListItem" + (isActive ? " active" : "")
             }
           >
             <Report className="sidebarIcon" />
@@ -56,7 +56,7 @@ function Sidebar() {
           <NavLink
             to="/staff"
             className={({ isActive }) =>
-              "sidebarListItem" + (isActive ? "active" : "")
+              "sidebarListItem" + (isActive ? " active" : "")
             }
           >
             <PermIdentity className="sidebarIcon" />

@@ -1,13 +1,11 @@
-import "./JobMaterialsTable.css";
 import {
   BsFillTrashFill,
   BsFillPencilFill,
-  BsArrowRightSquareFill,
 } from "react-icons/bs";
 // import { useAuth } from "../context/UserContext";
 
 
-function LaborTable({ laborEntries, editLabor }) {
+function LaborTable({ laborEntries, editLabor, deleteLabor }) {
 
   return (
     <div className="table-wrapper">
@@ -39,6 +37,9 @@ function LaborTable({ laborEntries, editLabor }) {
                   <BsFillPencilFill
                       className="edit-btn"
                       onClick={() => editLabor(idx)}
+                    />
+                    <BsFillTrashFill className="delete-btn"
+                    onClick={() => deleteLabor(idx)}
                     />
                 </span>
               </td>

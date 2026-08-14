@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Dropdown from "../DropdownContainer/Dropdown/Dropdown";
 import DropdownItem from "../DropdownContainer/DropdownItem/DropdownItem";
-import "./JobForm.css";
 
 function EditJobForm({ saveEditedJob, closeForm, jobToEdit }) {
   const [name, setName] = useState("");
@@ -47,7 +46,7 @@ function EditJobForm({ saveEditedJob, closeForm, jobToEdit }) {
       }}
     >
       <div className="form">
-        Edit Job
+        <h3 className="form-title">Edit Job</h3>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <input

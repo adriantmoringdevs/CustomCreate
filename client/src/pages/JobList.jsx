@@ -85,7 +85,7 @@ function JobList() {
       })
       .then(() => {
         setJobs((prevJobs) =>
-          prevJobs.filter((job) => job.id != jobToDelete.id),
+          prevJobs.filter((job) => job.id != jobToDelete.id)
         );
       })
       .catch((err) => {
@@ -94,7 +94,7 @@ function JobList() {
   }
 
   return (
-    <div>
+    <div className="page-stack">
       <JobsTable
         jobs={jobs}
         editJob={handleEditJob}
@@ -127,6 +127,9 @@ function JobList() {
         <DeleteConfirm
           deleteJob={handleDeleteJob}
           jobToDelete={jobToDelete !== null && jobs[jobToDelete]}
+          closeDeleteConfirm={() => {
+            setDeleteOpen(false);
+          }}
         />
       )}
     </div>

@@ -63,7 +63,8 @@ class MaterialSchema(Schema):
     material_lots = fields.List(fields.Nested(MaterialLotSchema(exclude=("material",))))
     # reorder_requests = fields.List(fields.Nested(lambda: ReorderRequestSchema(exclude=("material",))))
     low_stock = fields.Function(lambda material: material.low_stock)
-    is_available = fields.Function(lambda material: material.is_available)
+    is_available = fields.Function(lambda material: str(material.is_available))
+    total_quantity = fields.Function(lambda material: str(material.total_quantity))
 
 class ReorderRequestSchema(Schema):
     id = fields.Int()
