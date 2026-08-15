@@ -13,7 +13,7 @@ function AvailableLotsTable({ lots, addUsage, location }) {
 
   return (
     <div className="table-wrapper">
-      <h1>Available Lots</h1>
+      <h1>Material Lots Available</h1>
       <table className="table">
         <thead>
           <tr>

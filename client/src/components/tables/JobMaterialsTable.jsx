@@ -1,7 +1,7 @@
 function JobMaterialsTable({materials}) {
     return (
         <div className="table-wrapper">
-        <h1>Job Materials</h1>
+        <h1>Logged Job Materials</h1>
         <table className="table">
     
         <thead>
