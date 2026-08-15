@@ -33,7 +33,7 @@ Think: a manager creates a job for a customer, logs materials pulled from invent
 
 Six core tables: `User`, `Job`, `Material`, `MaterialLot`, `JobMaterialUsage`, `LaborEntry`, and `ReorderRequest`. The lot/usage split is the key design choice — materials aren't just "in stock, X quantity," they're purchased in lots (each with its own cost), and jobs pull from specific lots so cost tracking stays accurate even when the price of a material changes between purchases.
 
-![Database schema diagram](./docs/schema.png)
+![Database schema diagram](./docs/CustomCreatorSchema.pdf)
 
 
 ## Getting started
