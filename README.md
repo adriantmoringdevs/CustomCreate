@@ -35,7 +35,6 @@ Six core tables: `User`, `Job`, `Material`, `MaterialLot`, `JobMaterialUsage`, `
 
 ![Database schema diagram](./docs/schema.png)
 
-*(drop the schema image in `docs/schema.png` — or wherever you'd rather keep it, just update the path above)*
 
 ## Getting started
 
