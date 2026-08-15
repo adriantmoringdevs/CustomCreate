@@ -26,7 +26,7 @@
 
 .logo {
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: var(--color-text);
 }
 
@@ -34,6 +34,12 @@
   display: flex;
   align-items: center;
   gap: var(--space-4);
+}
+
+.topbarWelcome {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
 }
 
 .topbarLogoutBtn {
@@ -61,14 +67,6 @@
   position: sticky;
   top: 0;
   padding: var(--space-6) 0;
-}
-
-.sidebarTitle {
-  padding: 0 var(--space-6) var(--space-6);
-  margin: 0;
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--color-text);
 }
 
 .sidebarList {
@@ -128,13 +126,16 @@
     width: 64px;
   }
 
-  .sidebarTitle,
   .sidebarListItem li {
     display: none;
   }
 
   .sidebarListItem {
     justify-content: center;
+  }
+
+  .topbarWelcome {
+    display: none;
   }
 
   .sidebarIcon {

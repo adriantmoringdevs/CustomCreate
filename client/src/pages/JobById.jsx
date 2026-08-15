@@ -9,6 +9,7 @@ import EditLaborForm from "../components/forms/EditLaborForm.jsx";
 import DeleteLaborForm from "../components/forms/DeleteLaborForm.jsx";
 
 function JobById() {
+  const [job, setJob] = useState(null)
   const [jobMaterialUsages, setJobMaterialUsage] = useState([]);
   const [availableLots, setAvailableLots] = useState([]);
   const [laborEntries, setLaborEntries] = useState([]);
@@ -20,6 +21,21 @@ function JobById() {
   const [laborToDelete, setLaborToDelete] = useState(null);
   const [deleteLaborFormOpen, setDeleteLaborFormOpen] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+    fetch(`http://localhost:5000/api${location.pathname}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Invalid token");
+        return res.json();
+      })
+      .then((data) => {
+        setJob(data);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -152,6 +168,20 @@ function JobById() {
 
   return (
     <div className="page-stack">
+      {job && (
+        <div className="job-header">
+          <h1>Job Details</h1>
+          <div className="job-header-meta">
+            <span>
+              <span className="job-header-label">Job</span> {job.name}
+            </span>
+            <span>
+              <span className="job-header-label">Customer</span>{" "}
+              {job.customer}
+            </span>
+          </div>
+        </div>
+      )}
       <LaborTable
         laborEntries={laborEntries}
         editLabor={handleEditLabor}

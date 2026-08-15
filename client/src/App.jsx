@@ -9,7 +9,7 @@ import JobList from "./pages/JobList";
 import JobById from "./pages/JobById";
 import MaterialList from "./pages/MaterialList";
 // import MaterialDetail from "./pages/MaterialDetail";
-// import ReorderRequestList from "./pages/ReorderRequestList";
+import ReorderRequestList from "./pages/ReorderRequestList";
 import StaffList from "./pages/StaffList";
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
         <Route path="/jobs/:id" element={<JobById />} />
         <Route path="/materials" element={<MaterialList />} />
         {/* <Route path="/materials/:id" element={<MaterialDetail />} /> */}
-        {/* <Route path="/reorder-requests" element={<ReorderRequestList />} /> */}
+        <Route path="/reorder-requests" element={<ReorderRequestList />} />
         <Route path="/staff" element={<StaffList />} />
 
       </Route>

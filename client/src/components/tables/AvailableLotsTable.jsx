@@ -34,6 +34,7 @@ function AvailableLotsTable({ lots, addUsage, location }) {
             <tr key={idx}>
               <td>
               <BsClipboardCheckFill
+              className="clipboard"
                 onClick={() => handleAssignLot(idx)}
               />
               </td>

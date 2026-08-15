@@ -15,7 +15,6 @@ function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebarWrapper">
-        <h3 className="sidebarTitle">CustomCreator</h3>
         <ul className="sidebarList">
           <NavLink
             to="/"
