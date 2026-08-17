@@ -1,10 +1,8 @@
-function MaterialsTable({materials}) {
-
-    return (
-               <div className="table-wrapper">
-        <h1>Inventory</h1>
-        <table className="table">
-    
+function MaterialsTable({ materials }) {
+  return (
+    <div className="table-wrapper">
+      <h1>Inventory</h1>
+      <table className="table">
         <thead>
           <tr>
             <th scope="col" className="expand">
@@ -31,9 +29,9 @@ function MaterialsTable({materials}) {
             </tr>
           ))}
         </tbody>
-        </table>
-        </div>
-    )
+      </table>
+    </div>
+  );
 }
 
 export default MaterialsTable;
