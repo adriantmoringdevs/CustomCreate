@@ -4,6 +4,7 @@ import "../styles/Dashboard.css";
 
 function Dashboard() {
   const [jobs, setJobs] = useState([]);
+  const [materials, setMaterials] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -25,10 +26,30 @@ function Dashboard() {
       .finally(() => setIsLoading(false));
   }, []);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    fetch("http://localhost:5000/api/materials", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to load materials:");
+      return res.json()
+    })
+    .then((data) => setMaterials(data))
+    .catch((err) => {
+      console.error("Error loading dashobard materials:", err);
+      setError("Couldn't load materials")
+    })
+    .finally(() => setIsLoading(false));
+  }, []);
+
   const activeJobs = jobs.filter(
     (job) => job.status === "QUOTED" || job.status === "IN_PROGRESS"
   );
 
+  const lowMaterials = materials.filter((material) => material.low_stock === true)
+
+  console.log(lowMaterials)
   if (isLoading) return <div className="dashboard-container">Loading...</div>;
   if (error) return <div className="dashboard-container">{error}</div>;
 
