@@ -13,6 +13,7 @@ function JobList() {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [jobToDelete, setJobToDelete] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -92,6 +93,9 @@ function JobList() {
         console.error("Error deleting job:", err);
       });
   }
+
+    if (isLoading) return <div className='table-wrapper'>Loading...</div>
+    if (error) return <div className='table-wrapper'>{error}</div>;
 
   return (
     <div className="page-stack">

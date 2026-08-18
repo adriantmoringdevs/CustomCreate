@@ -1,4 +1,7 @@
-function ReorderRequestsTable({ requests, user }) {
+import { BsFillPencilFill } from "react-icons/bs"
+
+function ReorderRequestsTable({ requests, user, editRequest }) {
+
   return (
     <div className="table-wrapper">
       <h1>Reorder Requests Table</h1>
@@ -14,6 +17,7 @@ function ReorderRequestsTable({ requests, user }) {
             <th scope="col">Created By</th>
             <th scope="col">Status</th>
             <th scope="col">Notes</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -24,6 +28,13 @@ function ReorderRequestsTable({ requests, user }) {
                     <td>{user.username}</td>
                     <td>{request.status}</td>
                     <td>{request.notes}</td>
+                    <td>
+                      <span className="actions">
+                        <BsFillPencilFill className="edit-btn"
+                        onClick={() => editRequest(idx)}
+                        />
+                      </span>
+                    </td>
                 </tr>
             ))}
         </tbody>
