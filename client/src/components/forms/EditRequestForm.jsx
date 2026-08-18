@@ -25,15 +25,15 @@ function EditRequestForm({
     setStatus(status);
   }
 
-  function handleMaterialChange(material) {
-    setMaterial(material);
-  }
+  // function handleMaterialChange(material) {
+  //   setMaterial(material);
+  // }
 
   function handleSubmit(e) {
-    e.preventDeafult();
+    e.preventDefault();
     requestToEdit.status = status;
     requestToEdit.notes = notes;
-    requestToEdit.material_id = material.id;
+    // requestToEdit.material_id = material.id;
     saveEditedRequest(requestToEdit);
     closeForm();
   }
@@ -46,10 +46,11 @@ function EditRequestForm({
       }}
     >
       <div className="form">
-        <h3 className="form-title">Edit Reorder Request</h3>
+        <h3 className="form-title">Edit Reorder Request for {material.name} SKU #{material.sku}</h3>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <Dropdown
+
+            {/* <Dropdown
               buttonText={material.name || "Select a Material"}
               content={
                 <>
@@ -63,7 +64,7 @@ function EditRequestForm({
                   ))}
                 </>
               }
-            />
+            /> */}
           </div>
 
           <div className="form-group">
