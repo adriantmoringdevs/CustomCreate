@@ -8,7 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import JobList from "./pages/JobList";
 import JobById from "./pages/JobById";
 import MaterialList from "./pages/MaterialList";
-// import MaterialDetail from "./pages/MaterialDetail";
+import MaterialDetail from "./pages/MaterialDetail";
 import ReorderRequestList from "./pages/ReorderRequestList";
 import StaffList from "./pages/StaffList";
 
@@ -16,7 +16,6 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginSignup />} />
-
       <Route
         element={
           <ProtectedRoute>
@@ -28,7 +27,7 @@ function App() {
         <Route path="/jobs" element={<JobList />} />
         <Route path="/jobs/:id" element={<JobById />} />
         <Route path="/materials" element={<MaterialList />} />
-        {/* <Route path="/materials/:id" element={<MaterialDetail />} /> */}
+        <Route path="/materials/:id" element={<MaterialDetail />} />
         <Route path="/reorder-requests" element={<ReorderRequestList />} />
         <Route path="/staff" element={<StaffList />} />
 

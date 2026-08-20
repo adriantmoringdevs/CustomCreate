@@ -9,7 +9,7 @@ import EditLaborForm from "../components/forms/EditLaborForm.jsx";
 import DeleteLaborForm from "../components/forms/DeleteLaborForm.jsx";
 
 function JobById() {
-  const [job, setJob] = useState(null)
+  const [job, setJob] = useState(null);
   const [jobMaterialUsages, setJobMaterialUsage] = useState([]);
   const [availableLots, setAvailableLots] = useState([]);
   const [laborEntries, setLaborEntries] = useState([]);
@@ -23,7 +23,7 @@ function JobById() {
   const location = useLocation();
 
   useEffect(() => {
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token");
     fetch(`http://localhost:5000/api${location.pathname}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -176,8 +176,7 @@ function JobById() {
               <span className="job-header-label">Job</span> {job.name}
             </span>
             <span>
-              <span className="job-header-label">Customer</span>{" "}
-              {job.customer}
+              <span className="job-header-label">Customer</span> {job.customer}
             </span>
           </div>
         </div>
@@ -232,9 +231,7 @@ function JobById() {
       {deleteLaborFormOpen && (
         <DeleteLaborForm
           deleteLabor={handleDeleteLabor}
-          laborToDelete={
-            laborToDelete !== null && laborEntries[laborToDelete]
-          }
+          laborToDelete={laborToDelete !== null && laborEntries[laborToDelete]}
           closeForm={() => {
             setDeleteLaborFormOpen(false);
           }}

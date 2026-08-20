@@ -1,0 +1,75 @@
+.widgetSm {
+  flex: 1;
+  -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+  padding: 20px;
+  margin-right: 20px;
+}
+
+.widgetSmTitle {
+  font-size: 22px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.widgetSmTitleIcon {
+  font-size: 20px;
+  color: red;
+}
+
+.widgetSmList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.widgetSmListItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 20px 0px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.widgetSmListItem > div {
+  flex: 1;
+  font-size: 14px;
+}
+
+.widgetSmName {
+  font-weight: 600;
+}
+
+.widgetSmSKU {
+  color: #777;
+}
+
+.widgetSmReorderPoint {
+  display: flex;
+  flex-direction: column;
+}
+
+.widgetSmTotalQuantity {
+  font-weight: 300;
+}
+
+.widgetSmButton {
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 10px;
+  padding: 7px 10px;
+  background-color: #eeeef7;
+  color: #555;
+  cursor: pointer;
+}
+
+.widgetSmIcon {
+  font-size: 16px !important;
+  margin-right: 5px;
+}
+

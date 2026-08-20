@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import LowStockAlert from "../components/LowStockAlert";
 import "../styles/Dashboard.css";
 
 function Dashboard() {
@@ -89,22 +90,10 @@ function Dashboard() {
           ))}
         </div>
       )}
-      <div>
-        {lowMaterials.length !== 0 && (
-          lowMaterials.map((material) => (
-            <div 
-            key={material.id}>
-              Low Material Alerts
-              <div className="low-material-card-body">
-                <p className="low-material-card-name">Name: {material.name}</p>
-                <p className="low-material-sku">SKU #: {material.sku}</p>
-                <p className="low-material-reorder-point">Reorder Point: {material.reorder_point}</p>
-                <p className="low-material-total_quantity">Total Quantity: {material.total_quantity}</p>
-              </div>
-              </div>
-          ))
-        ) }
-      </div>
+
+      {lowMaterials.length !== 0 && (
+        <LowStockAlert lowMaterials={lowMaterials} />
+      )}
     </div>
   );
 }

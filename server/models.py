@@ -73,6 +73,7 @@ class Job(db.Model):
     def total_job_cost(self):
         return self.labor_cost + self.material_cost
 
+
     @validates('status')
     def validate_status(self, key, value):
         valid_statuses = ["QUOTED", "IN_PROGRESS", "COMPLETED", "CANCELLED"]
@@ -170,6 +171,11 @@ class Material(db.Model):
         if self.reorder_point is None:
             return False
         return self.total_quantity < self.reorder_point
+
+    @property
+    def last_purchased(self):
+        last_date_object = max(self.material_lots, key=lambda lot: lot.created_at, default=None)
+        return last_date_object.created_at if last_date_object else None
 
     @validates('sku')
     def validate_status(self, key, value):
