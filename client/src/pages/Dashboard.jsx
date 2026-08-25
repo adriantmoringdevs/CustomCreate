@@ -6,6 +6,7 @@ import "../styles/Dashboard.css";
 function Dashboard() {
   const [jobs, setJobs] = useState([]);
   const [materials, setMaterials] = useState([]);
+  const [requests, setRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -33,15 +34,32 @@ function Dashboard() {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Failed to load materials:");
+        if (!res.ok) throw new Error("Failed to load materials");
         return res.json();
       })
       .then((data) => setMaterials(data))
       .catch((err) => {
-        console.error("Error loading dashobard materials:", err);
+        console.error("Error loading dashboard materials", err);
         setError("Couldn't load materials");
       })
       .finally(() => setIsLoading(false));
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    fetch("http://localhost:5000/api/reorder_requests", {
+        headers: { Authorization: `Bearer ${token}` },
+    })
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to load request amount");
+      return res.json();
+    })
+    .then((data) => setRequests(data))
+    .catch((err) => {
+      console.error("Error loading Request Amount", err);
+      setError("Couldn't load Request Amount");
+    })
+    .finally(() => setIsLoading(false))
   }, []);
 
   const activeJobs = jobs.filter(
@@ -52,7 +70,11 @@ function Dashboard() {
     (material) => material.low_stock === true,
   );
 
-  console.log(lowMaterials);
+  const pendingRequests = requests.filter(
+    (request) => request.status === "PENDING",
+  );
+
+
   if (isLoading) return <div className="dashboard-container">Loading...</div>;
   if (error) return <div className="dashboard-container">{error}</div>;
 
@@ -82,9 +104,9 @@ function Dashboard() {
                 {job.customer && (
                   <p className="job-card-client">{job.customer}</p>
                 )}
-                {job.due_date && (
+                {/* {job.due_date && (
                   <p className="job-card-due">Due: {job.due_date}</p>
-                )}
+                )} */}
               </div>
             </div>
           ))}
@@ -94,6 +116,10 @@ function Dashboard() {
       {lowMaterials.length !== 0 && (
         <LowStockAlert lowMaterials={lowMaterials} />
       )}
+      <div>Reorder Requests Waiting:
+        {requests ?
+        pendingRequests.length : 0}
+      </div>
     </div>
   );
 }

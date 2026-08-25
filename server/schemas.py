@@ -77,19 +77,22 @@ class ReorderRequestSchema(Schema):
     # user = fields.Nested(UserSchema(exclude=("reorder_requests",)))
     material = fields.Nested(MaterialSchema(exclude=("reorder_requests",)))
 
-class OrderJobMaterialSchema(Schema):
-    material = fields.Nested(MaterialSchema)
-    material_lot = fields.Nested(MaterialLotSchema)
-    job_material_usage = fields.Nested(JobMaterialUsageSchema)
+class ReorderRequestAmountScema(Schema):
+    amount = fields.Int()
+
+# class OrderJobMaterialSchema(Schema):
+#     material = fields.Nested(MaterialSchema)
+#     material_lot = fields.Nested(MaterialLotSchema)
+#     job_material_usage = fields.Nested(JobMaterialUsageSchema)
 
 class OrderInventoryMaterialSchema(Schema):
     material = fields.Nested(MaterialSchema)
     material_lot = fields.Nested(MaterialLotSchema)
 
-class UseMaterialLotSchema(Schema):
-    job_material_usage = fields.Nested(JobMaterialUsageSchema)
-    material_lot = fields.Nested(MaterialLotSchema)
-    material = fields.Nested(MaterialSchema)
+# class UseMaterialLotSchema(Schema):
+#     job_material_usage = fields.Nested(JobMaterialUsageSchema)
+#     material_lot = fields.Nested(MaterialLotSchema)
+#     material = fields.Nested(MaterialSchema)
 
 
 

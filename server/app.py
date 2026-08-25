@@ -6,7 +6,7 @@ from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity, create_a
 from flask_cors import CORS
 from config import app, db, api, jwt
 from models import User, Job, Material, MaterialLot, JobMaterialUsage,  ReorderRequest, LaborEntry
-from schemas import UserSchema, JobSchema, MaterialSchema, MaterialLotSchema, JobMaterialUsageSchema, ReorderRequestSchema, LaborEntrySchema, OrderJobMaterialSchema, OrderInventoryMaterialSchema, UseMaterialLotSchema
+from schemas import UserSchema, JobSchema, MaterialSchema, MaterialLotSchema, JobMaterialUsageSchema, ReorderRequestSchema, LaborEntrySchema, ReorderRequestAmountScema, OrderInventoryMaterialSchema
 from functools import wraps
 
 CORS(app,
@@ -161,7 +161,7 @@ class Materials(Resource):
         try:
             db.session.add(material)
             db.session.commit()
-            return OrderJobMaterialSchema().dump(material), 201
+            return MaterialSchema().dump(material), 201
         except IntegrityError:
             return {'errors': ['422 Unprocessable Entity']}, 422
 
@@ -201,12 +201,6 @@ class MaterialByID(Resource):
     def get(self, material_id):
         material = Material.query.filter(Material.id == material_id).first()
         return MaterialSchema().dump(material), 200
-
-
-# class MaterialTotals(Resource):
-#     @jwt_required()
-#     def get(self):
-#         material_totals = []
 
 
 class AvailableMaterialLots(Resource):
@@ -455,6 +449,12 @@ class ReorderRequests(Resource):
         except IntegrityError:
             return {'errors': ['422 Unprocessable Entity']}, 422
 
+class ReorderRequestTotal(Resource):
+    @jwt_required()
+    def get(self):
+        amount = len(ReorderRequest.query.filter(ReorderRequest.status == "PENDING").all())
+        return ReorderRequestAmountScema().dump(amount), 200
+
 
 api.add_resource(Data, '/api/data', endpoint='data')      
 api.add_resource(Signup, '/api/signup', endpoint='signup')
@@ -474,6 +474,7 @@ api.add_resource(LaborEntries, '/api/labor_entries', endpoint='labor_entries')
 api.add_resource(LaborEntriesByJob, '/api/jobs/<int:job_id>/labor_by_job', endpoint='labor_by_job')
 api.add_resource(LaborEntryByID, '/api/labor_entries/<int:labor_entry_id>')
 api.add_resource(ReorderRequests, '/api/reorder_requests', endpoint='reorder_requests')
+api.add_resource(ReorderRequestTotal, '/api/reorder_requests/amount', endpoint='amount')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
