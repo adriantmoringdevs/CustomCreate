@@ -35,7 +35,7 @@ function JobById() {
         setJob(data);
       })
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [jobMaterialUsages, laborEntries]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -177,6 +177,9 @@ function JobById() {
             </span>
             <span>
               <span className="job-header-label">Customer</span> {job.customer}
+            </span>
+            <span>
+              <span className="job-header-label">Total Cost</span> ${job.total_job_cost}
             </span>
           </div>
         </div>
