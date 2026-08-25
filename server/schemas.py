@@ -66,6 +66,7 @@ class MaterialSchema(Schema):
     is_available = fields.Function(lambda material: str(material.is_available))
     total_quantity = fields.Function(lambda material: str(material.total_quantity))
     last_purchased = fields.Function(lambda material: str(material.last_purchased))
+    avg_price = fields.Function(lambda material: str(material.avg_price) )
 
 class ReorderRequestSchema(Schema):
     id = fields.Int()

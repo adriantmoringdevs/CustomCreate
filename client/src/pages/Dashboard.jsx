@@ -79,8 +79,8 @@ function Dashboard() {
                 </span>
               </div>
               <div className="job-card-body">
-                {job.client_name && (
-                  <p className="job-card-client">{job.client_name}</p>
+                {job.customer && (
+                  <p className="job-card-client">{job.customer}</p>
                 )}
                 {job.due_date && (
                   <p className="job-card-due">Due: {job.due_date}</p>

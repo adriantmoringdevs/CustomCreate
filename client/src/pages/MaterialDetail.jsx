@@ -21,10 +21,45 @@ function MaterialDetail() {
       .finally(() => setIsLoading(false));
   }, []);
 
+  function convertTime(rawTime) {
+    const fixedString = rawTime
+      .replace(" ", "T")
+      .replace(/(\d{2}):(\d{6})$/, ".$1$2");
+    const dateObj = new Date(fixedString);
+    return dateObj.toLocaleString();
+  }
+
   return (
     <div>
       Material Detail
-      {material && <div>{material.name}</div>}
+      {material && (
+        <div>
+        <div>{material.name}</div>
+
+      <div>Last Purchased 
+        <span>
+          {convertTime(material.last_purchased)}
+        </span>
+      </div>
+      <div>Current Stock
+        <span>{material.total_quantity}</span>
+      </div>
+      <div>
+        Reorder Point
+        <span>{material.reorder_point}</span>
+      </div>
+      <div>
+        Distributor
+        <span>
+        {material.distributor}
+        </span>
+      </div>
+      <div>Average Price
+        <span>{material.avg_price}</span>
+      </div>
+      </div>
+      )}
+
     </div>
   );
 }

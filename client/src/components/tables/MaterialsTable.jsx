@@ -1,4 +1,11 @@
+import { useNavigate } from "react-router-dom";
+import { 
+  BsArrowRightSquareFill
+} from "react-icons/bs";
+
 function MaterialsTable({ materials }) {
+  const navigate = useNavigate();
+
   return (
     <div className="table-wrapper">
       <h1>Inventory</h1>
@@ -15,6 +22,7 @@ function MaterialsTable({ materials }) {
             <th scope="col">Unit/Measure</th>
             <th scope="col">Distributor</th>
             <th scope="col">Reorder Point</th>
+            <th scope="col">To Material Details</th>
           </tr>
         </thead>
         <tbody>
@@ -26,6 +34,11 @@ function MaterialsTable({ materials }) {
               <td>{material.unit_measure}</td>
               <td>{material.distributor}</td>
               <td>{material.reorder_point}</td>
+              <td>
+                <span>
+                  <BsArrowRightSquareFill onClick={() => navigate(`/materials/${material.id}`)} />
+                </span>
+              </td>
             </tr>
           ))}
         </tbody>

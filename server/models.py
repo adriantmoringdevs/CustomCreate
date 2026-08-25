@@ -177,6 +177,11 @@ class Material(db.Model):
         last_date_object = max(self.material_lots, key=lambda lot: lot.created_at, default=None)
         return last_date_object.created_at if last_date_object else None
 
+    @property
+    def avg_price(self):
+        return sum(lot.unit_cost for lot in self.material_lots) / len(self.material_lots)
+
+
     @validates('sku')
     def validate_status(self, key, value):
         if len(value) > 50:
