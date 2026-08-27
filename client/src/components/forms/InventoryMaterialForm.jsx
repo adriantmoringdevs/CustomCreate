@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function JobMaterialsForm({ addUsage, location, closeForm }) {
+function InventoryMaterialForm({ addMaterial, closeForm }) {
   const [orderDetails, setOrderDetails] = useState({
     name: "",
     distributor: "",
@@ -9,7 +9,6 @@ function JobMaterialsForm({ addUsage, location, closeForm }) {
     unitMeasure: "",
     quantityPurchased: "",
     unitCost: "",
-    quantityUsed: "",
   });
   const [error, setError] = useState(null);
 
@@ -17,8 +16,7 @@ function JobMaterialsForm({ addUsage, location, closeForm }) {
     const token = localStorage.getItem("token");
     e.preventDefault();
     setError("");
-    const quantityRemaining =
-      orderDetails.quantityPurchased - orderDetails.quantityUsed;
+    const quantityRemaining = orderDetails.quantityPurchased;
     const order = {
       name: orderDetails.name,
       sku: orderDetails.sku,
@@ -28,9 +26,8 @@ function JobMaterialsForm({ addUsage, location, closeForm }) {
       quantity_purchased: orderDetails.quantityPurchased,
       unit_cost: orderDetails.unitCost,
       quantity_remaining: quantityRemaining,
-      quantity_used: orderDetails.quantityUsed,
     };
-    fetch(`http://localhost:5000/api${location.pathname}/materials/order`, {
+    fetch("http://localhost:5000/api/materials/stock", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -45,7 +42,7 @@ function JobMaterialsForm({ addUsage, location, closeForm }) {
         }
         throw new Error("New order post failed");
       })
-      .then((data) => addUsage(data));
+      .then((data) => addMaterial(data));
     closeForm();
   }
 
@@ -65,7 +62,7 @@ function JobMaterialsForm({ addUsage, location, closeForm }) {
       }}
     >
       <div className="form">
-        <h3 className="form-title">Order New Job Materials</h3>
+        <h3 className="form-title">Order Inventory Material</h3>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <input
@@ -139,7 +136,7 @@ function JobMaterialsForm({ addUsage, location, closeForm }) {
               onChange={handleChange}
             />
           </div>
-          <div className="form-group">
+          {/* <div className="form-group">
             <input
               type="text"
               placeholder="Quantity Used"
@@ -147,7 +144,7 @@ function JobMaterialsForm({ addUsage, location, closeForm }) {
               value={orderDetails.quantityUsed}
               onChange={handleChange}
             />
-          </div>
+          </div> */}
 
           <button type="submit" className="btn">
             Order Material
@@ -158,4 +155,4 @@ function JobMaterialsForm({ addUsage, location, closeForm }) {
   );
 }
 
-export default JobMaterialsForm;
+export default InventoryMaterialForm;

@@ -6,7 +6,7 @@ from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity, create_a
 from flask_cors import CORS
 from config import app, db, api, jwt
 from models import User, Job, Material, MaterialLot, JobMaterialUsage,  ReorderRequest, LaborEntry
-from schemas import UserSchema, JobSchema, MaterialSchema, MaterialLotSchema, JobMaterialUsageSchema, ReorderRequestSchema, LaborEntrySchema, ReorderRequestAmountScema, OrderInventoryMaterialSchema
+from schemas import UserSchema, JobSchema, MaterialSchema, MaterialLotSchema, JobMaterialUsageSchema, ReorderRequestSchema, LaborEntrySchema, OrderInventoryMaterialSchema
 from functools import wraps
 
 CORS(app,
@@ -268,8 +268,8 @@ class OrderJobMaterial(Resource):
             return {'errors': ['422 Unprocessable Entity']}, 422
 
 class OrderInventoryMaterial(Resource):
-    @check_role
     @jwt_required()
+    @check_role
     def post(self):
         request_json = request.get_json()
         material = Material.query.filter_by(sku=request_json["sku"]).first()
@@ -301,11 +301,7 @@ class OrderInventoryMaterial(Resource):
 
         try:
             db.session.commit()
-            result = {
-                "material": material,
-                "material_lot": material_lot
-            }
-            return OrderInventoryMaterialSchema().dump(result), 201
+            return MaterialLotSchema().dump(material_lot), 201
         except IntegrityError:
             return {'errors': ['422 Unprocessable Entity']}, 422
 
@@ -449,11 +445,11 @@ class ReorderRequests(Resource):
         except IntegrityError:
             return {'errors': ['422 Unprocessable Entity']}, 422
 
-class ReorderRequestTotal(Resource):
-    @jwt_required()
-    def get(self):
-        amount = len(ReorderRequest.query.filter(ReorderRequest.status == "PENDING").all())
-        return ReorderRequestAmountScema().dump(amount), 200
+# class ReorderRequestTotal(Resource):
+#     @jwt_required()
+#     def get(self):
+#         amount = len(ReorderRequest.query.filter(ReorderRequest.status == "PENDING").all())
+#         return ReorderRequestAmountScema().dump(amount), 200
 
 
 api.add_resource(Data, '/api/data', endpoint='data')      
@@ -467,14 +463,14 @@ api.add_resource(JobMaterialUsagesByJobId, '/api/jobs/<int:job_id>/job_material_
 api.add_resource(Materials, '/api/materials', endpoint='materials')
 api.add_resource(MaterialByID, '/api/materials/<int:material_id>')
 api.add_resource(AvailableMaterialLots, '/api/materials/available', endpoint='available')
-api.add_resource(OrderInventoryMaterial, '/api/materials/order')
+api.add_resource(OrderInventoryMaterial, '/api/materials/stock')
 api.add_resource(OrderJobMaterial, '/api/jobs/<int:job_id>/materials/order')
 api.add_resource(UseMaterialLot, '/api/jobs/<int:job_id>/materials/use', endpoint='use')
 api.add_resource(LaborEntries, '/api/labor_entries', endpoint='labor_entries')
 api.add_resource(LaborEntriesByJob, '/api/jobs/<int:job_id>/labor_by_job', endpoint='labor_by_job')
 api.add_resource(LaborEntryByID, '/api/labor_entries/<int:labor_entry_id>')
 api.add_resource(ReorderRequests, '/api/reorder_requests', endpoint='reorder_requests')
-api.add_resource(ReorderRequestTotal, '/api/reorder_requests/amount', endpoint='amount')
+# api.add_resource(ReorderRequestTotal, '/api/reorder_requests/amount', endpoint='amount')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

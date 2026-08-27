@@ -77,8 +77,8 @@ class ReorderRequestSchema(Schema):
     # user = fields.Nested(UserSchema(exclude=("reorder_requests",)))
     material = fields.Nested(MaterialSchema(exclude=("reorder_requests",)))
 
-class ReorderRequestAmountScema(Schema):
-    amount = fields.Int()
+# class ReorderRequestAmountScema(Schema):
+#     amount = fields.Int()
 
 # class OrderJobMaterialSchema(Schema):
 #     material = fields.Nested(MaterialSchema)
