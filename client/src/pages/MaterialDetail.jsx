@@ -1,9 +1,11 @@
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import ReorderMaterialForm from "../components/forms/ReorderMaterialForm";
 
 function MaterialDetail() {
   const [material, setMaterial] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [reorderFormOpen, setReorderFormOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -41,7 +43,7 @@ function MaterialDetail() {
           {convertTime(material.last_purchased)}
         </span>
       </div>
-      <div>Current Stock
+      <div>Current Stock Across Lots
         <span>{material.total_quantity}</span>
       </div>
       <div>
@@ -57,6 +59,14 @@ function MaterialDetail() {
       <div>Average Price
         <span>{material.avg_price}</span>
       </div>
+
+      <button onClick={() => setReorderFormOpen(true)}>Reorder {material.name}</button>
+      {reorderFormOpen && (
+        <ReorderMaterialForm
+        closeForm={() => setReorderFormOpen(false)} 
+        location = {location}
+        material={material}/>
+      )}
       </div>
       )}
 

@@ -305,12 +305,31 @@ class OrderInventoryMaterial(Resource):
         except IntegrityError:
             return {'errors': ['422 Unprocessable Entity']}, 422
 
+class ReorderInventoryMaterial(Resource):
+    @jwt_required()
+    @check_role
+    def post(self, material_id):
+        request_json = request.get_json()
+        try:
+            material_lot = MaterialLot(
+                        quantity_purchased = request_json["quantity_purchased"],
+                        unit_cost = request_json["unit_cost"],
+                        quantity_remaining = request_json["quantity_remaining"],
+                        material_id = material_id
+                    )
+            db.session.add(material_lot)
+            db.session.commit()
+            return MaterialLotSchema().dump(material_lot), 201
+        except IntegrityError:
+            return {'errors': ['422 Unprocessable Entity']}, 422
+        
+
 class UseMaterialLot(Resource):
     @jwt_required()
     def post(self, job_id):
         request_json = request.get_json()
         material_lot = MaterialLot.query.filter(MaterialLot.id==request_json["material_lot_id"]).first()
-        material = Material.query.filter(Material.id==material_lot.material_id).first()
+        # material = Material.query.filter(Material.id==material_lot.material_id).first()
         if float(request_json["quantity_used"]) <= material_lot.quantity_remaining:
             material_lot.quantity_remaining = float(material_lot.quantity_remaining) - float(request_json["quantity_used"])
         else:
@@ -445,11 +464,6 @@ class ReorderRequests(Resource):
         except IntegrityError:
             return {'errors': ['422 Unprocessable Entity']}, 422
 
-# class ReorderRequestTotal(Resource):
-#     @jwt_required()
-#     def get(self):
-#         amount = len(ReorderRequest.query.filter(ReorderRequest.status == "PENDING").all())
-#         return ReorderRequestAmountScema().dump(amount), 200
 
 
 api.add_resource(Data, '/api/data', endpoint='data')      
@@ -464,13 +478,13 @@ api.add_resource(Materials, '/api/materials', endpoint='materials')
 api.add_resource(MaterialByID, '/api/materials/<int:material_id>')
 api.add_resource(AvailableMaterialLots, '/api/materials/available', endpoint='available')
 api.add_resource(OrderInventoryMaterial, '/api/materials/stock')
+api.add_resource(ReorderInventoryMaterial, '/api/materials/<int:material_id>/reorder', endpoint='reorder')
 api.add_resource(OrderJobMaterial, '/api/jobs/<int:job_id>/materials/order')
 api.add_resource(UseMaterialLot, '/api/jobs/<int:job_id>/materials/use', endpoint='use')
 api.add_resource(LaborEntries, '/api/labor_entries', endpoint='labor_entries')
 api.add_resource(LaborEntriesByJob, '/api/jobs/<int:job_id>/labor_by_job', endpoint='labor_by_job')
 api.add_resource(LaborEntryByID, '/api/labor_entries/<int:labor_entry_id>')
 api.add_resource(ReorderRequests, '/api/reorder_requests', endpoint='reorder_requests')
-# api.add_resource(ReorderRequestTotal, '/api/reorder_requests/amount', endpoint='amount')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

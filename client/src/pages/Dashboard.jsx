@@ -48,18 +48,18 @@ function Dashboard() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     fetch("http://localhost:5000/api/reorder_requests", {
-        headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${token}` },
     })
-    .then((res) => {
-      if (!res.ok) throw new Error("Failed to load request amount");
-      return res.json();
-    })
-    .then((data) => setRequests(data))
-    .catch((err) => {
-      console.error("Error loading Request Amount", err);
-      setError("Couldn't load Request Amount");
-    })
-    .finally(() => setIsLoading(false))
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to load request amount");
+        return res.json();
+      })
+      .then((data) => setRequests(data))
+      .catch((err) => {
+        console.error("Error loading Request Amount", err);
+        setError("Couldn't load Request Amount");
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   const activeJobs = jobs.filter(
@@ -73,7 +73,6 @@ function Dashboard() {
   const pendingRequests = requests.filter(
     (request) => request.status === "PENDING",
   );
-
 
   if (isLoading) return <div className="dashboard-container">Loading...</div>;
   if (error) return <div className="dashboard-container">{error}</div>;
@@ -116,9 +115,9 @@ function Dashboard() {
       {lowMaterials.length !== 0 && (
         <LowStockAlert lowMaterials={lowMaterials} />
       )}
-      <div>Reorder Requests Waiting:
-        {requests ?
-        pendingRequests.length : 0}
+      <div>
+        Reorder Requests Waiting:
+        {requests ? pendingRequests.length : 0}
       </div>
     </div>
   );
