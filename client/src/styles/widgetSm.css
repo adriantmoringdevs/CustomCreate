@@ -1,10 +1,14 @@
+/* ---- Card container ---- */
+
 .widgetSm {
-  flex: 1;
-  -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+  background: #fff;
+  border-radius: 8px;
   box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
   padding: 20px;
-  margin-right: 20px;
+  margin: 24px 0;
 }
+
+/* ---- Title row (text + icon) ---- */
 
 .widgetSmTitle {
   font-size: 22px;
@@ -12,64 +16,88 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  line-height: 1;
 }
 
-.widgetSmTitleIcon {
+.widgetSmTitleIcon.MuiSvgIcon-root {
+  color: #e53e3e;
   font-size: 20px;
-  color: red;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: block;
 }
 
-.widgetSmList {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+/* ---- Table ---- */
+
+.widgetSmTable {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  margin-top: 12px;
 }
 
-.widgetSmListItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin: 20px 0px;
-  padding-bottom: 12px;
+.widgetSmTable th:nth-child(1),
+.widgetSmTable td:nth-child(1) {
+  width: 55%;
+}
+
+.widgetSmTable th:nth-child(2),
+.widgetSmTable td:nth-child(2) {
+  width: 30%;
+}
+
+.widgetSmTable th:nth-child(3),
+.widgetSmTable td:nth-child(3) {
+  width: 15%;
+}
+
+.widgetSmTable th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #999;
+  font-weight: 600;
+  padding: 0 8px 8px;
   border-bottom: 1px solid #eee;
 }
 
-.widgetSmListItem > div {
-  flex: 1;
-  font-size: 14px;
+/* This selector (th + two classes) must stay MORE specific than
+   ".widgetSmTable th" above, or the "text-align: left" from that
+   rule will win and this centering will silently get ignored. */
+.widgetSmTable th.widgetSmTableActionHeader {
+  text-align: center;
+}
+
+.widgetSmTableRow td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #f2f2f2;
+  vertical-align: middle;
 }
 
 .widgetSmName {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .widgetSmSKU {
-  color: #777;
+  color: #666;
+  font-family: monospace;
+  font-size: 13px;
 }
 
-.widgetSmReorderPoint {
-  display: flex;
-  flex-direction: column;
+.widgetSmTableAction {
+  text-align: center;
 }
 
-.widgetSmTotalQuantity {
-  font-weight: 300;
-}
+/* ---- Reorder button ---- */
 
-.widgetSmButton {
-  display: flex;
-  align-items: center;
+.nav-btn {
+  background: none;
   border: none;
-  border-radius: 10px;
-  padding: 7px 10px;
-  background-color: #eeeef7;
-  color: #555;
+  padding: 0;
   cursor: pointer;
+  font-size: 18px;
+  color: var(--color-primary);
+  display: inline-flex;
 }
-
-.widgetSmIcon {
-  font-size: 16px !important;
-  margin-right: 5px;
-}
-

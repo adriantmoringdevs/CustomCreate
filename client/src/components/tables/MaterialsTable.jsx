@@ -36,7 +36,7 @@ function MaterialsTable({ materials }) {
               <td>{material.reorder_point}</td>
               <td>
                 <span>
-                  <BsArrowRightSquareFill onClick={() => navigate(`/materials/${material.id}`)} />
+                  <BsArrowRightSquareFill className="nav-btn" onClick={() => navigate(`/materials/${material.id}`)} />
                 </span>
               </td>
             </tr>

@@ -67,3 +67,60 @@
 .job-card-due {
   margin: 0;
 }
+
+.reorder-status-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-border-strong);
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+  transition:
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+.reorder-status-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.reorder-status-icon {
+  font-size: 1.25rem;
+  color: var(--color-text-muted);
+}
+
+.reorder-status-label {
+  flex: 1;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+}
+
+.reorder-status-count {
+  min-width: 1.75rem;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.875rem;
+  background-color: var(--color-surface-muted);
+  color: var(--color-text-muted);
+}
+
+.reorder-status-card-pending {
+  border-left-color: var(--color-warning);
+}
+
+.reorder-status-card-pending .reorder-status-icon {
+  color: var(--color-warning);
+}
+
+.reorder-status-card-pending .reorder-status-count {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+}

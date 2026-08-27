@@ -1,0 +1,150 @@
+/* MaterialDetail.css */
+
+.material-detail {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  color: var(--color-text);
+}
+
+/* ---- Header ---- */
+
+.material-detail-header {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  border-bottom: 2px solid var(--color-border-strong);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.material-eyebrow {
+  flex-basis: 100%;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.material-detail-header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  flex: 1;
+}
+
+.reorder-button {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.6rem 1.1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.reorder-button:hover {
+  background: var(--color-primary-hover);
+}
+
+/* ---- Computed stats ---- */
+
+.material-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 6px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.stat-card .stat-label {
+  color: var(--color-warning);
+}
+
+.stat-card .stat-value {
+  color: var(--color-warning);
+}
+
+.stat-card .stat-unit {
+  color: var(--color-warning);
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.stat-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-value--date {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.stat-unit {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* ---- Raw attributes ---- */
+
+.material-attributes h2 {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.material-attributes dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.6rem 1.5rem;
+  margin: 0;
+}
+
+.material-attributes dt {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.material-attributes dd {
+  margin: 0;
+  font-weight: 500;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.9rem;
+}
+
+/* ---- States ---- */
+
+.material-detail-loading,
+.material-detail-error {
+  padding: 2rem;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 560px) {
+  .material-stats {
+    grid-template-columns: 1fr;
+  }
+}

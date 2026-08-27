@@ -184,25 +184,27 @@ function JobById() {
           </div>
         </div>
       )}
+      <div className="page-actions">
+        <button className="btn" onClick={() => setLaborFormOpen(true)}>
+          Log New Labor Entry
+        </button>
+      </div>
       <LaborTable
         laborEntries={laborEntries}
         editLabor={handleEditLabor}
         deleteLabor={handleDeleteLaborSelect}
       />
+      <div className="page-actions">
+        <button className="btn" onClick={() => setMaterialsFormOpen(true)}>
+          Order New Job Materials
+        </button>
+      </div>
       <JobMaterialsTable materials={jobMaterialUsages} />
       <AvailableLotsTable
         lots={availableLots}
         addUsage={addUsage}
         location={location}
       />
-      <div className="page-actions">
-        <button className="btn" onClick={() => setMaterialsFormOpen(true)}>
-          Order New Job Materials
-        </button>
-        <button className="btn" onClick={() => setLaborFormOpen(true)}>
-          Log New Labor Entry
-        </button>
-      </div>
 
       {materialsFormOpen && (
         <JobMaterialsForm

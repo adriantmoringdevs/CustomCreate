@@ -99,17 +99,19 @@ function JobList() {
 
   return (
     <div className="page-stack">
+      {user.role === "MANAGER" && (
+        <div className="page-actions">
+          <button className="btn" onClick={() => setJobFormOpen(true)}>
+            Add Job
+          </button>
+        </div>
+      )}
       <JobsTable
         jobs={jobs}
         editJob={handleEditJob}
         deleteJob={handleDeleteJobSelect}
         user={user}
       />
-      {user.role === "MANAGER" && (
-        <button className="btn" onClick={() => setJobFormOpen(true)}>
-          Add Job
-        </button>
-      )}
       {jobFormOpen && (
         <NewJobForm
           addJob={addJob}

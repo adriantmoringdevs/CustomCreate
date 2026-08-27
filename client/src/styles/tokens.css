@@ -14,8 +14,9 @@
 
   --color-success: #16a34a;
   --color-success-bg: #f0fdf4;
-  --color-warning: #a5690b;
-  --color-warning-bg: #fdf0dc;
+  --color-warning: #0e7490;
+  --color-warning-bg: #ecfeff;
+  --color-warning-border: #a5f3fc;
   --color-error: #dc2626;
   --color-error-bg: #fef2f2;
 

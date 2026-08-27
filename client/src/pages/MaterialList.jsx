@@ -25,29 +25,31 @@ function MaterialList() {
   // }
 
   function refreshMaterials() {
-  const token = localStorage.getItem("token");
-  setIsLoading(true);
-  return fetch("http://localhost:5000/api/materials", {
-    headers: { Authorization: `Bearer ${token}` },
-  })
-    .then((res) => {
-      if (!res.ok) throw new Error("Invalid token");
-      return res.json();
+    const token = localStorage.getItem("token");
+    setIsLoading(true);
+    return fetch("http://localhost:5000/api/materials", {
+      headers: { Authorization: `Bearer ${token}` },
     })
-    .then((data) => setMaterials(data))
-    .finally(() => setIsLoading(false));
-}
+      .then((res) => {
+        if (!res.ok) throw new Error("Invalid token");
+        return res.json();
+      })
+      .then((data) => setMaterials(data))
+      .finally(() => setIsLoading(false));
+  }
 
-    useEffect(() => {
-      refreshMaterials();
-      }, []); 
+  useEffect(() => {
+    refreshMaterials();
+  }, []);
 
   return (
     <div className="page-stack">
+      <div className="page-actions">
+        <button className="btn" onClick={() => setMaterialsFormOpen(true)}>
+          Order Inventory Material
+        </button>
+      </div>
       {materials && <MaterialsTable materials={materials} />}
-      <button className="btn" onClick={() => setMaterialsFormOpen(true)}>
-        Order Inventory Material
-      </button>
       {materialsFormOpen && (
         <InventoryMaterialForm
           closeForm={() => {

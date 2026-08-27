@@ -80,6 +80,11 @@ function ReorderRequestList() {
 
   return (
     <div className="page-stack">
+      <div className="page-actions">
+        <button className="btn" onClick={() => setRequestFormOpen(true)}>
+          Add Reorder Request
+        </button>
+      </div>
       <ReorderRequestsTable
         requests={reorderRequests}
         user={user}
@@ -95,9 +100,6 @@ function ReorderRequestList() {
           materials={materials}
         />
       )}
-      <button className="btn" onClick={() => setRequestFormOpen(true)}>
-        Add Reorder Request
-      </button>
       {editRequestFormOpen && (
         <EditRequestForm
           saveEditedRequest={saveEditedRequest}

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { BsBoxSeam } from "react-icons/bs";
 import LowStockAlert from "../components/LowStockAlert";
 import "../styles/Dashboard.css";
 
@@ -115,9 +116,15 @@ function Dashboard() {
       {lowMaterials.length !== 0 && (
         <LowStockAlert lowMaterials={lowMaterials} />
       )}
-      <div>
-        Reorder Requests Waiting:
-        {requests ? pendingRequests.length : 0}
+      <div
+        className={`reorder-status-card${pendingRequests.length > 0 ? " reorder-status-card-pending" : ""}`}
+        onClick={() => navigate("/reorder-requests")}
+      >
+        <BsBoxSeam className="reorder-status-icon" />
+        <span className="reorder-status-label">Reorder Requests Waiting</span>
+        <span className="reorder-status-count">
+          {requests ? pendingRequests.length : 0}
+        </span>
       </div>
     </div>
   );

@@ -5,26 +5,40 @@ import { useNavigate } from "react-router-dom";
 
 function LowStockAlert({ lowMaterials }) {
   const navigate = useNavigate();
+
   return (
     <div className="widgetSm">
       <span className="widgetSmTitle">
         Low Stock Alert
         <Report className="widgetSmTitleIcon" />
       </span>
-      <ul className="widgetSmList">
-        <div>
+
+      <table className="widgetSmTable">
+        <thead>
+          <tr>
+            <th>Material</th>
+            <th>SKU</th>
+            <th className="widgetSmTableActionHeader">Reorder</th>
+          </tr>
+        </thead>
+        <tbody>
           {lowMaterials.map((material) => (
-            <li className="widgetSmListItem" key={material.id}>
-              <div className="widgetSmName">{material.name}</div>
-              <div className="widgetSmSKU">SKU #: {material.sku}</div>
-              <BsArrowRightSquareFill
-                className="nav-btn"
-                onClick={() => navigate(`/materials/${material.id}`)}
-              />
-            </li>
+            <tr className="widgetSmTableRow" key={material.id}>
+              <td className="widgetSmName">{material.name}</td>
+              <td className="widgetSmSKU">{material.sku}</td>
+              <td className="widgetSmTableAction">
+                <button
+                  className="nav-btn"
+                  onClick={() => navigate(`/materials/${material.id}`)}
+                  aria-label={`Reorder ${material.name}`}
+                >
+                  <BsArrowRightSquareFill />
+                </button>
+              </td>
+            </tr>
           ))}
-        </div>
-      </ul>
+        </tbody>
+      </table>
     </div>
   );
 }
