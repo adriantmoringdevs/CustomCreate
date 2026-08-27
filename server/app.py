@@ -295,11 +295,6 @@ class OrderInventoryMaterial(Resource):
             material_id = material.id
             )
             db.session.add(material_lot)
-            db.session.flush()
-        except IntegrityError:
-            db.session.rollback()
-
-        try:
             db.session.commit()
             return MaterialLotSchema().dump(material_lot), 201
         except IntegrityError:

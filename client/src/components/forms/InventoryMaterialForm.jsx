@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function InventoryMaterialForm({ addMaterial, closeForm }) {
+function InventoryMaterialForm({ refreshMaterials, closeForm }) {
   const [orderDetails, setOrderDetails] = useState({
     name: "",
     distributor: "",
@@ -42,7 +42,7 @@ function InventoryMaterialForm({ addMaterial, closeForm }) {
         }
         throw new Error("New order post failed");
       })
-      .then((data) => addMaterial(data));
+      .then((data) => refreshMaterials(data));
     closeForm();
   }
 

@@ -33,31 +33,31 @@ function MaterialDetail() {
 
   return (
     <div>
-      Material Detail
+      Material Name: 
       {material && (
         <div>
         <div>{material.name}</div>
 
-      <div>Last Purchased 
+      <div>Last Purchased:  
         <span>
           {convertTime(material.last_purchased)}
         </span>
       </div>
-      <div>Current Stock Across Lots
+      <div>Current Stock Across Lots: 
         <span>{material.total_quantity}</span>
       </div>
       <div>
-        Reorder Point
+        Reorder Point: 
         <span>{material.reorder_point}</span>
       </div>
       <div>
-        Distributor
+        Distributor: 
         <span>
         {material.distributor}
         </span>
       </div>
-      <div>Average Price
-        <span>{material.avg_price}</span>
+      <div>Average Price per Unit: 
+        <span>${material.avg_price} per {material.unit_measure}</span>
       </div>
 
       <button onClick={() => setReorderFormOpen(true)}>Reorder {material.name}</button>

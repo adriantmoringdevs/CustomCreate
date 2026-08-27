@@ -7,23 +7,40 @@ function MaterialList() {
   const [isLoading, setIsLoading] = useState(true);
   const [materialsFormOpen, setMaterialsFormOpen] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/materials", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Invalid token");
-        return res.json();
-      })
-      .then((data) => setMaterials(data))
-      .finally(() => setIsLoading(false));
-  }, [materials]);
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   fetch("http://localhost:5000/api/materials", {
+  //     headers: { Authorization: `Bearer ${token}` },
+  //   })
+  //     .then((res) => {
+  //       if (!res.ok) throw new Error("Invalid token");
+  //       return res.json();
+  //     })
+  //     .then((data) => setMaterials(data))
+  //     .finally(() => setIsLoading(false));
+  // }, []);
 
-  function addMaterial(newMaterial) {
-    console.log(newMaterial);
-    setMaterials((prevMaterials) => [...prevMaterials, newMaterial]);
-  }
+  // function addMaterial(newMaterial) {
+  //   setMaterials((prevMaterials) => [...prevMaterials, newMaterial]);
+  // }
+
+  function refreshMaterials() {
+  const token = localStorage.getItem("token");
+  setIsLoading(true);
+  return fetch("http://localhost:5000/api/materials", {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Invalid token");
+      return res.json();
+    })
+    .then((data) => setMaterials(data))
+    .finally(() => setIsLoading(false));
+}
+
+    useEffect(() => {
+      refreshMaterials();
+      }, []); 
 
   return (
     <div className="page-stack">
@@ -36,7 +53,7 @@ function MaterialList() {
           closeForm={() => {
             setMaterialsFormOpen(false);
           }}
-          addMaterial={addMaterial}
+          refreshMaterials={refreshMaterials}
         />
       )}
     </div>
