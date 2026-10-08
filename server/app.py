@@ -15,7 +15,7 @@ CORS(app, origins=origins, supports_credentials=True)
 def check_role(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         user = User.query.filter(User.id==current_user_id).first()
         if user.role == "EMPLOYEE":
             return {'error': 'Employee cannot create Jobs or order Materials'}, 404
@@ -47,7 +47,7 @@ class Signup(Resource):
         
 class WhoAmI(Resource):
     def get(self):
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.filter(User.id == user_id).first()
         return User.UserSchema().dump(user), 200
     
@@ -78,7 +78,7 @@ class Jobs(Resource):
     @jwt_required()
     @check_role
     def post(self):
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         
         request_json = request.get_json()
         job = Job(
@@ -346,7 +346,7 @@ class LaborEntries(Resource):
     @jwt_required()
     def post(self):
         request_json = request.get_json()
-        current_id = get_jwt_identity()
+        current_id = int(get_jwt_identity())
         labor_entry = LaborEntry(
             user_id = current_id,
             job_id = request_json["job_id"],
@@ -363,7 +363,7 @@ class LaborEntries(Resource):
     @jwt_required()
     def put(self):
         request_json = request.get_json()
-        current_id = get_jwt_identity()
+        current_id = int(get_jwt_identity())
         labor_entry = LaborEntry.query.filter(LaborEntry.id==request_json["id"]).first()
 
         if not labor_entry:
@@ -418,7 +418,7 @@ class ReorderRequests(Resource):
     @jwt_required()
     def post(self):
         request_json = request.get_json()
-        current_id = get_jwt_identity()
+        current_id = int(get_jwt_identity())
         reorder_request = ReorderRequest(
             material_id = request_json["material_id"],
             user_id = current_id,
