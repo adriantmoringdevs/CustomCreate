@@ -55,7 +55,10 @@ function SignupForm({ signup, isLoading }) {
           content={
             <>
               {roles.map((role, id) => (
-                <DropdownItem key={id} onClick={() => handleRoleChange(role)}>{`${role}`}</DropdownItem>
+                <DropdownItem
+                  key={id}
+                  onClick={() => handleRoleChange(role)}
+                >{`${role}`}</DropdownItem>
               ))}
             </>
           }

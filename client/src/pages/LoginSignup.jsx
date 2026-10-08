@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/UserContext";
 // import { Button } from "../styles";
 import LoginForm from "../components/LoginForm";
-import SignUpForm from "../components/SignupForm";
+import SignupForm from "../components/SignupForm";
 
 function LoginSignup() {
   const { isLoading, login, signup, logout } = useAuth();
