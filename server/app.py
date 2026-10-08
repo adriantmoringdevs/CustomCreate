@@ -9,9 +9,8 @@ from models import User, Job, Material, MaterialLot, JobMaterialUsage,  ReorderR
 from schemas import UserSchema, JobSchema, MaterialSchema, MaterialLotSchema, JobMaterialUsageSchema, ReorderRequestSchema, LaborEntrySchema, OrderInventoryMaterialSchema
 from functools import wraps
 
-CORS(app,
-    origins=["http://localhost:5173"],
-    supports_credentials=True)
+origins = [o.strip() for o in os.environ.get('CORS_ORIGINS', 'http://localhost:5173').split(',')]
+CORS(app, origins=origins, supports_credentials=True)
 
 def check_role(f):
     @wraps(f)
