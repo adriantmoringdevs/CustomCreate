@@ -16,7 +16,7 @@ function AssignMaterialForm({ closeForm, lot, addUsage, location }) {
       material_lot_id: lot.id,
       job_id: jobID,
     };
-    fetch(`http://localhost:5000/api${location.pathname}/materials/use`, {
+    fetch(`/api${location.pathname}/materials/use`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -18,7 +18,7 @@ function JobList() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/jobs", {
+    fetch("/api/jobs", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -40,7 +40,7 @@ function JobList() {
 
   function saveEditedJob(job) {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/jobs", {
+    fetch("/api/jobs", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -69,7 +69,7 @@ function JobList() {
 
   function handleDeleteJob(jobToDelete) {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/jobs", {
+    fetch("/api/jobs", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -86,7 +86,7 @@ function JobList() {
       })
       .then(() => {
         setJobs((prevJobs) =>
-          prevJobs.filter((job) => job.id != jobToDelete.id)
+          prevJobs.filter((job) => job.id != jobToDelete.id),
         );
       })
       .catch((err) => {
@@ -94,8 +94,8 @@ function JobList() {
       });
   }
 
-    if (isLoading) return <div className='table-wrapper'>Loading...</div>
-    if (error) return <div className='table-wrapper'>{error}</div>;
+  if (isLoading) return <div className="table-wrapper">Loading...</div>;
+  if (error) return <div className="table-wrapper">{error}</div>;
 
   return (
     <div className="page-stack">

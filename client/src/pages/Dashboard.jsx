@@ -14,7 +14,7 @@ function Dashboard() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/jobs", {
+    fetch("/api/jobs", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -31,7 +31,7 @@ function Dashboard() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/materials", {
+    fetch("/api/materials", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -48,7 +48,7 @@ function Dashboard() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/reorder_requests", {
+    fetch("/api/reorder_requests", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {

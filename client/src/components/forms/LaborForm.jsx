@@ -19,7 +19,7 @@ function LaborForm({ closeForm, location, addLaborEntry }) {
       hours: hours,
       hourly_rate: hourlyRate,
     };
-    fetch("http://localhost:5000/api/labor_entries", {
+    fetch("/api/labor_entries", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -17,7 +17,7 @@ function ReorderMaterialForm({ closeForm, location, material }) {
       unit_cost: unitCost,
       quantity_remaining: quantityRemaining,
     };
-    fetch(`http://localhost:5000/api${location.pathname}/reorder`, {
+    fetch(`/api${location.pathname}/reorder`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

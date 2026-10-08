@@ -26,7 +26,7 @@ function JobById() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch(`http://localhost:5000/api${location.pathname}`, {
+    fetch(`/api${location.pathname}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -41,7 +41,7 @@ function JobById() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch(`http://localhost:5000/api${location.pathname}/job_material_usages`, {
+    fetch(`/api${location.pathname}/job_material_usages`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -56,7 +56,7 @@ function JobById() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/materials/available", {
+    fetch("/api/materials/available", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -71,7 +71,7 @@ function JobById() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch(`http://localhost:5000/api${location.pathname}/labor_by_job`, {
+    fetch(`/api${location.pathname}/labor_by_job`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -86,7 +86,7 @@ function JobById() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/materials/available", {
+    fetch("/api/materials/available", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -114,7 +114,7 @@ function JobById() {
 
   function saveEditedLabor(entry) {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/labor_entries", {
+    fetch("/api/labor_entries", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -143,7 +143,7 @@ function JobById() {
 
   function handleDeleteLabor(entryToDelete) {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/labor_entries", {
+    fetch("/api/labor_entries", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

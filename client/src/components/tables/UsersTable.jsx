@@ -7,7 +7,7 @@ function UsersTable() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/users", {
+    fetch("/api/users", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {

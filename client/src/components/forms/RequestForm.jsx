@@ -19,7 +19,7 @@ function RequestForm({ closeForm, addRequest, materials }) {
       status: status,
       notes: notes,
     };
-    fetch("http://localhost:5000/api/reorder_requests", {
+    fetch("/api/reorder_requests", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

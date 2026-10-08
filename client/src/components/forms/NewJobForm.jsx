@@ -22,7 +22,7 @@ function NewJobForm({ addJob, closeForm }) {
       status: status,
       payment_status: paymentStatus,
     };
-    fetch("http://localhost:5000/api/jobs", {
+    fetch("/api/jobs", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

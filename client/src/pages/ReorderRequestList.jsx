@@ -16,7 +16,7 @@ function ReorderRequestList() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/reorder_requests", {
+    fetch("/api/reorder_requests", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -29,7 +29,7 @@ function ReorderRequestList() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/materials", {
+    fetch("/api/materials", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -51,7 +51,7 @@ function ReorderRequestList() {
 
   function saveEditedRequest(request) {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/reorder_requests", {
+    fetch("/api/reorder_requests", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

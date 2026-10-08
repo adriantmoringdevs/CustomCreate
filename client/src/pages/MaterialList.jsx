@@ -9,7 +9,7 @@ function MaterialList() {
 
   // useEffect(() => {
   //   const token = localStorage.getItem("token");
-  //   fetch("http://localhost:5000/api/materials", {
+  //   fetch("/api/materials", {
   //     headers: { Authorization: `Bearer ${token}` },
   //   })
   //     .then((res) => {
@@ -27,7 +27,7 @@ function MaterialList() {
   function refreshMaterials() {
     const token = localStorage.getItem("token");
     setIsLoading(true);
-    return fetch("http://localhost:5000/api/materials", {
+    return fetch("/api/materials", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {

@@ -27,7 +27,7 @@ function InventoryMaterialForm({ refreshMaterials, closeForm }) {
       unit_cost: orderDetails.unitCost,
       quantity_remaining: quantityRemaining,
     };
-    fetch("http://localhost:5000/api/materials/stock", {
+    fetch("/api/materials/stock", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

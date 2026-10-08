@@ -30,7 +30,7 @@ function JobMaterialsForm({ addUsage, location, closeForm }) {
       quantity_remaining: quantityRemaining,
       quantity_used: orderDetails.quantityUsed,
     };
-    fetch(`http://localhost:5000/api${location.pathname}/materials/order`, {
+    fetch(`/api${location.pathname}/materials/order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

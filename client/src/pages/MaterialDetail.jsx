@@ -11,7 +11,7 @@ function MaterialDetail() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch(`http://localhost:5000/api${location.pathname}`, {
+    fetch(`/api${location.pathname}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
