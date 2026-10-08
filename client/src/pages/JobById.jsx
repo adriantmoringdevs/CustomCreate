@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useAuth } from "../context/UserContext";
 import AvailableLotsTable from "../components/tables/AvailableLotsTable.jsx";
 import JobMaterialsTable from "../components/tables/JobMaterialsTable.jsx";
 import JobMaterialsForm from "../components/forms/JobMaterialsForm.jsx";
@@ -21,6 +22,7 @@ function JobById() {
   const [laborToDelete, setLaborToDelete] = useState(null);
   const [deleteLaborFormOpen, setDeleteLaborFormOpen] = useState(false);
   const location = useLocation();
+  const { user } = useAuth();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -179,7 +181,8 @@ function JobById() {
               <span className="job-header-label">Customer</span> {job.customer}
             </span>
             <span>
-              <span className="job-header-label">Total Cost</span> ${job.total_job_cost}
+              <span className="job-header-label">Total Cost</span> $
+              {job.total_job_cost}
             </span>
           </div>
         </div>
@@ -195,9 +198,11 @@ function JobById() {
         deleteLabor={handleDeleteLaborSelect}
       />
       <div className="page-actions">
-        <button className="btn" onClick={() => setMaterialsFormOpen(true)}>
-          Order New Job Materials
-        </button>
+        {user.role === "MANAGER" && (
+          <button className="btn" onClick={() => setMaterialsFormOpen(true)}>
+            Order New Job Materials
+          </button>
+        )}
       </div>
       <JobMaterialsTable materials={jobMaterialUsages} />
       <AvailableLotsTable

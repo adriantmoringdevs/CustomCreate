@@ -179,7 +179,10 @@ class Material(db.Model):
 
     @property
     def avg_price(self):
-        return sum(lot.unit_cost for lot in self.material_lots) / len(self.material_lots)
+        if not self.material_lots:
+            return 0.00
+        return round(sum(lot.unit_cost for lot in self.material_lots) / len(self.material_lots), 2)
+
 
 
     @validates('sku')
